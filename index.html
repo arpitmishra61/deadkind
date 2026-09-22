@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DeadKind — DK-2050</title>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&family=Space+Grotesk:wght@300;400;500;600&family=Share+Tech+Mono&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #ff3fa4;
+  --accent-rgb: 255,63,164;
+  --glow1: rgba(255,63,164,0.55);
+  --glow2: rgba(180,20,100,0.35);
+  --glow3: rgba(120,10,60,0.18);
+  --floor-glow-color: rgba(200,50,120,0.5);
+  --floor-glow-color2: rgba(150,30,80,0.25);
+  --tab-active-border: #ff3fa4;
+  --btn-color: #c8ff00;
+  --collection-label-color: #c8ff00;
+  --black: #070709;
+  --dark: #0d0d0d;
+  --border: #1e1e1e;
+  --border2: #2a2a2a;
+  --void-black: #0A0A0A;
+  --bone-white: #F2F2F2;
+  --ash-grey: #4A4A4A;
+  --blood-red: #FF0000;
+  --acid-yellow: #DFFF00;
+  --yellow: #DFFF00;
+  --white: #F2F2F2;
+  --gray: #666;
+  --gray2: #444;
+  --font-heading: 'Antonio', 'Impact', sans-serif;
+  --font-body: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+  --font-script: 'Permanent Marker', cursive;
+}
+body.theme-rebel {
+  --accent: #ff6b35; --accent-rgb: 255,107,53;
+  --glow1: rgba(255,107,53,0.55); --glow2: rgba(180,60,20,0.35); --glow3: rgba(120,30,10,0.18);
+  --floor-glow-color: rgba(220,80,30,0.5); --floor-glow-color2: rgba(160,50,10,0.25);
+  --tab-active-border: #ff6b35; --btn-color: #ff6b35; --collection-label-color: #ff6b35;
+}
+body.theme-lineup {
+  --accent: #ff3fa4; --accent-rgb: 255,63,164;
+  --glow1: rgba(255,63,164,0.55); --glow2: rgba(180,20,100,0.35); --glow3: rgba(120,10,60,0.18);
+  --floor-glow-color: rgba(200,50,120,0.5); --floor-glow-color2: rgba(150,30,80,0.25);
+  --tab-active-border: #ff3fa4; --btn-color: #DFFF00; --collection-label-color: #DFFF00;
+}
+body.theme-chaos {
+  --accent: #00cfff; --accent-rgb: 0,207,255;
+  --glow1: rgba(0,207,255,0.55); --glow2: rgba(0,120,200,0.35); --glow3: rgba(0,60,120,0.18);
+  --floor-glow-color: rgba(0,160,220,0.5); --floor-glow-color2: rgba(0,100,160,0.25);
+  --tab-active-border: #00cfff; --btn-color: #00cfff; --collection-label-color: #00cfff;
+}
+body.theme-internet {
+  --accent: #9b59ff; --accent-rgb: 155,89,255;
+  --glow1: rgba(155,89,255,0.55); --glow2: rgba(90,40,200,0.35); --glow3: rgba(50,20,120,0.18);
+  --floor-glow-color: rgba(130,60,240,0.5); --floor-glow-color2: rgba(80,30,160,0.25);
+  --tab-active-border: #9b59ff; --btn-color: #9b59ff; --collection-label-color: #9b59ff;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;scroll-behavior:smooth}
+body{background:var(--void-black);color:var(--bone-white);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+@media (min-width: 769px) { body { overflow-y: hidden; } }
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);pointer-events:none;z-index:9999}
+
+.corner{position:fixed;width:16px;height:16px;z-index:300}
+.corner-tl{top:6px;left:6px;border-top:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.corner-tr{top:6px;right:6px;border-top:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.corner-bl{bottom:6px;left:6px;border-bottom:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.corner-br{bottom:6px;right:6px;border-bottom:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+
+/* ============ HEADER ============ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(10,10,10,.97);border-bottom:1px solid var(--border);
+  height:72px;display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  padding:0 18px;
+}
+.header-left{display:flex;align-items:center;gap:14px;justify-self:start;z-index:2}
+.skull-logo{width:52px;height:52px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.skull-logo img{width:100%;height:100%;object-fit:contain}
+.header-status{font-family:var(--font-body);font-size:9px;line-height:1.8;color:var(--gray);font-weight:500;letter-spacing:0.5px}
+.status-online{color:var(--acid-yellow);font-size:9px;display:flex;align-items:center;gap:5px;margin-bottom:1px;font-weight:600}
+.status-dot{display:inline-block;width:6px;height:6px;background:var(--acid-yellow);border-radius:50%;box-shadow:0 0 6px var(--acid-yellow);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.header-center{display:flex;justify-content:center;align-items:center;justify-self:center;z-index:1}
+.brand-svg{height:56px;width:auto}
+.brand-name-img{height:54px;width:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(232,24,122,0.5)) drop-shadow(0 0 10px rgba(232,24,122,0.25))}
+.brand-name-fallback{font-family:var(--font-script);font-size:36px;color:var(--bone-white);letter-spacing:-1px;font-style:italic;filter:drop-shadow(0 0 6px rgba(232,24,122,0.5))}
+
+.header-right{display:flex;align-items:center;gap:0;justify-self:end;z-index:2}
+nav{display:flex;align-items:center;gap:0}
+nav a{font-family:var(--font-body);font-size:11.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;padding:0 16px;transition:color .2s;white-space:nowrap}
+nav a:hover{color:var(--bone-white)}
+
+/* Nav dropdown for Collections */
+.nav-dropdown-wrap{position:relative;display:inline-flex;align-items:center;height:100%}
+.nav-dropdown-menu{
+  position:absolute;top:100%;left:0;
+  background:#0c0c10;border:1px solid var(--border2);
+  min-width:220px;padding:8px 0;
+  display:none;flex-direction:column;
+  box-shadow:0 12px 32px rgba(0,0,0,0.9);
+  z-index:300;backdrop-filter:blur(10px);
+}
+.nav-dropdown-wrap:hover .nav-dropdown-menu{display:flex}
+.nav-dropdown-menu a{
+  padding:10px 16px;font-family:var(--font-body);font-size:10px;font-weight:600;
+  letter-spacing:1.5px;color:var(--gray);text-decoration:none;
+  display:flex;align-items:center;gap:10px;transition:all .2s;
+  border-bottom:none;
+}
+.nav-dropdown-menu a:hover{color:var(--bone-white);background:rgba(255,255,255,0.04)}
+.nav-dropdown-menu .drop-num{font-family:var(--font-mono);font-size:9px;color:var(--acid-yellow);font-weight:700}
+.drop-divider{height:1px;background:var(--border);margin:4px 0}
+.nav-dropdown-menu a.drop-all{color:var(--acid-yellow);font-weight:700}
+
+.header-divider{width:1px;height:32px;background:var(--border);margin:0 8px}
+.cart-btn{color:var(--bone-white);font-family:var(--font-body);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;padding:0 12px;letter-spacing:1px}
+.cart-btn:hover{color:var(--acid-yellow)}
+.header-plus-btn{width:38px;height:38px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:var(--gray);font-size:20px;cursor:pointer;transition:all .2s;flex-shrink:0}
+.header-plus-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.hamburger{width:38px;height:38px;display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;border:1px solid var(--border2);flex-shrink:0}
+.hamburger span{width:18px;height:1px;background:var(--gray);display:block}
+.cart-btn-mob{display:none;color:var(--bone-white);font-family:var(--font-body);font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;border:1px solid var(--border2);padding:6px 10px}
+
+.mob-nav{position:fixed;top:60px;left:0;right:0;background:rgba(10,10,10,0.98);border-bottom:1px solid var(--border);z-index:199;display:none;flex-direction:column;padding:12px 0}
+.mob-nav.open{display:flex}
+.mob-nav a{padding:12px 18px;font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;border-bottom:1px solid var(--border)}
+.mob-nav a:hover{color:var(--bone-white)}
+
+/* Mobile Sidebar Nav Group */
+.mob-nav-group{border-bottom:1px solid var(--border);display:flex;flex-direction:column}
+.mob-nav-group .mob-nav-parent{border-bottom:none;font-weight:700;color:var(--bone-white)}
+.mob-nav-sub{display:flex;flex-direction:column;background:rgba(18,18,24,0.7);padding:4px 0 6px 14px;border-top:1px solid var(--border2)}
+.mob-sub-item{padding:9px 16px !important;font-size:9.5px !important;color:var(--gray) !important;letter-spacing:1px !important;border-bottom:none !important;display:flex;align-items:center;gap:8px;}
+.mob-sub-item:hover, .mob-sub-item:active{color:var(--acid-yellow) !important}
+.mob-sub-item .sub-num{font-family:var(--font-mono);color:var(--acid-yellow);font-size:8.5px;font-weight:700}
+.mob-sub-all{color:var(--bone-white) !important;font-weight:600;margin-top:2px}
+
+/* ============ DESKTOP MAIN LAYOUT ============ */
+.main{
+  margin-top:72px;
+  display:grid;
+  grid-template-columns:54px 220px 1fr 220px;
+  height:calc(100vh - 72px - 75px);
+  overflow:hidden;
+  position:relative;
+}
+.sidebar-icons{display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:18px;border-right:1px solid var(--border)}
+.sidebar-icon{width:34px;height:34px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gray);cursor:pointer;transition:all .2s}
+.sidebar-icon:hover{border-color:var(--accent);color:var(--accent)}
+
+.left-panel{padding:14px 12px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:0;overflow:hidden}
+.collection-label{font-family:var(--font-body);font-size:9px;font-weight:500;color:var(--collection-label-color);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;transition:color .4s}
+.hero-title{font-family:var(--font-heading);font-weight:700;font-size:70px;line-height:0.88;color:var(--bone-white);letter-spacing:-1px;text-transform:uppercase}
+.hero-title .accent{color:var(--accent);transition:color .4s;display:block}
+.hero-tagline{font-family:var(--font-body);font-size:9px;line-height:2.2;color:var(--ash-grey);letter-spacing:1px;margin-top:12px;font-weight:400;text-transform:uppercase}
+.explore-btn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--btn-color);color:var(--btn-color);font-family:var(--font-body);font-size:9px;font-weight:600;letter-spacing:3px;padding:8px 12px;cursor:pointer;transition:all .3s;margin-top:14px;width:fit-content;text-transform:uppercase}
+.explore-btn:hover{background:var(--btn-color);color:var(--void-black)}
+
+.system-status{border:1px solid var(--border2);padding:10px;margin-top:auto}
+.sys-header{font-family:var(--font-body);font-size:9px;font-weight:600;color:var(--acid-yellow);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.sys-body{display:flex;gap:8px;align-items:flex-start}
+.sys-skull-box{width:48px;height:48px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sys-skull-box svg{width:38px;height:38px}
+.sys-info{flex:1;font-family:var(--font-body);font-size:9px;font-weight:500;color:var(--gray);line-height:1.7;letter-spacing:1px;text-transform:uppercase}
+.sys-info .highlight{color:var(--bone-white);font-weight:600}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--gray);margin-top:8px;letter-spacing:1px}
+.progress-label .pval{color:var(--accent);transition:color .4s}
+.progress-bar{height:3px;background:var(--border2);margin-top:4px}
+.progress-fill{height:100%;width:86%;background:var(--accent);box-shadow:0 0 8px var(--accent);transition:background .4s,box-shadow .4s}
+.sys-coords{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--gray);margin-top:8px;letter-spacing:0.5px}
+
+/* CENTER STAGE */
+.center-stage{position:relative;overflow:hidden;background:#050507}
+#bgStarsCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+#orbitCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:12;mix-blend-mode:screen}
+.holo-wrap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:280px;height:140px;z-index:14;pointer-events:none}
+.floor-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:85%;height:130px;background:radial-gradient(ellipse at center bottom,var(--floor-glow-color) 0%,var(--floor-glow-color2) 40%,transparent 80%);pointer-events:none;z-index:2;transition:background .5s}
+.floor-reflect{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60%;height:70px;background:radial-gradient(ellipse at center,rgba(var(--accent-rgb),0.18) 0%,transparent 70%);pointer-events:none;z-index:2;filter:blur(12px)}
+.model-wrap{position:absolute;top:0;bottom:0;left:0;right:0;z-index:8;pointer-events:none;display:flex;align-items:flex-end;justify-content:center}
+.model-img{height:100%;width:100%;object-fit:cover;object-position:center bottom;filter:drop-shadow(0 0 20px rgba(var(--accent-rgb),0.25)) drop-shadow(0 30px 50px rgba(0,0,0,.95));animation:model-glow 4s ease-in-out infinite;transition:filter .5s}
+@keyframes model-glow{0%,100%{filter:drop-shadow(0 0 20px rgba(var(--accent-rgb),0.25)) drop-shadow(0 30px 50px rgba(0,0,0,.95))}50%{filter:drop-shadow(0 0 40px rgba(var(--accent-rgb),0.5)) drop-shadow(0 30px 60px rgba(0,0,0,.98))}}
+
+/* ============ DESKTOP PRODUCT CARDS — NO ROTATION ============ */
+.product-card{
+  position:absolute;
+  background:rgba(9,9,12,0.92);
+  border:1px solid var(--border2);
+  padding:8px;
+  width:120px;
+  cursor:pointer;
+  z-index:10;
+  transition:border-color .2s, transform .15s;
+  backdrop-filter:blur(2px);
+}
+.product-card:hover{border-color:var(--accent) !important; transform:translateY(-3px) !important;}
+.product-card.unavailable{opacity:0.45;cursor:default;pointer-events:none;}
+.card-num{font-family:var(--font-mono);font-size:9px;color:var(--gray);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;letter-spacing:1px}
+.card-plus{color:var(--gray2);font-size:13px;line-height:1;cursor:pointer}
+.card-plus:hover{color:var(--accent)}
+.card-img{width:100%;aspect-ratio:1;margin-bottom:5px;border:1px solid var(--border);overflow:hidden;background:#0d0d12;position:relative;display:flex;align-items:center;justify-content:center}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.card-img-placeholder{font-family:var(--font-mono);font-size:8px;color:var(--gray2);text-align:center;letter-spacing:1px;padding:4px;line-height:1.5}
+.card-name{font-family:var(--font-body);font-size:7px;font-weight:500;color:var(--bone-white);letter-spacing:1px;text-transform:uppercase;line-height:1.4}
+.card-price{font-family:var(--font-heading);font-size:14px;font-weight:700;color:var(--bone-white);margin-top:2px;letter-spacing:1px}
+.card-na{font-family:var(--font-mono);font-size:8px;color:var(--gray2);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.cc{position:absolute;width:6px;height:6px}
+.cc-tl{top:2px;left:2px;border-top:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.cc-tr{top:2px;right:2px;border-top:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.cc-bl{bottom:2px;left:2px;border-bottom:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.cc-br{bottom:2px;right:2px;border-bottom:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.card-01{top:40px;left:230px;}
+.card-02{top:40px;right:230px;}
+.card-03{top:190px;left:80px;}
+.card-04{top:190px;right:80px;}
+.card-05{top:340px;left:230px;}
+.card-06{top:340px;right:230px;}
+.card-07{bottom:20px;left:90px;}
+.card-08{bottom:20px;right:90px;}
+
+/* RIGHT PANEL */
+.right-panel{padding:14px 10px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.panel-box{border:1px solid var(--border2);padding:9px}
+.panel-hdr{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body);font-size:9px;font-weight:600;color:var(--acid-yellow);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
+.panel-num{color:var(--gray);font-family:var(--font-mono)}
+.signal-img{width:100%;aspect-ratio:16/9;margin-bottom:7px;position:relative;overflow:hidden;border:1px solid var(--border)}
+.signal-img-inner{width:100%;height:100%;background:linear-gradient(135deg,#150823 0%,#2a0a1a 50%,#080a1f 100%);display:flex;align-items:center;justify-content:center;position:relative}
+.signal-img-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(140,20,90,.5),transparent 65%)}
+.planet-signal{position:relative;z-index:1;width:44px;height:44px;background:radial-gradient(circle at 35% 35%,#8b3a6b,#1a0a2a);border-radius:50%;box-shadow:0 0 20px rgba(140,20,90,.5)}
+.signal-text{font-family:var(--font-body);font-size:8px;font-weight:400;color:var(--gray);line-height:1.8;letter-spacing:1px;text-transform:uppercase}
+.signal-link{display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:8px;font-weight:500;color:var(--gray);margin-top:7px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.signal-link:hover{color:var(--bone-white)}
+.data-row{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--gray);padding:3px 0;border-bottom:1px solid var(--border);letter-spacing:0.5px}
+.data-row:last-of-type{border:none}
+.data-val{color:var(--bone-white)}
+.data-val.acc{color:var(--acid-yellow)}
+.view-link{font-family:var(--font-body);font-size:8px;font-weight:500;color:var(--gray);margin-top:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:5px;text-transform:uppercase}
+.view-link:hover{color:var(--bone-white)}
+.join-title{font-family:var(--font-heading);font-size:16px;font-weight:700;color:var(--acid-yellow);letter-spacing:2px;margin-bottom:5px;text-transform:uppercase}
+.join-text{font-family:var(--font-body);font-size:8px;font-weight:400;color:var(--gray);line-height:1.6;margin-bottom:8px}
+.email-row{display:flex;border:1px solid var(--border2)}
+.email-row input{flex:1;background:transparent;border:none;outline:none;font-family:var(--font-mono);font-size:9px;color:var(--bone-white);padding:7px 9px;letter-spacing:1px}
+.email-row input::placeholder{color:var(--gray2)}
+.email-sub{background:transparent;border:none;border-left:1px solid var(--border2);color:var(--gray);padding:7px 10px;cursor:pointer;font-size:12px;transition:color .2s}
+.email-sub:hover{color:var(--acid-yellow)}
+
+.float-actions{position:fixed;right:0;bottom:75px;display:flex;flex-direction:column;z-index:100}
+.float-btn{width:32px;background:var(--accent);color:var(--bone-white);display:flex;align-items:center;justify-content:center;padding:8px 0;font-size:15px;cursor:pointer;border:none}
+.float-barcode{background:var(--dark);border:1px solid var(--accent);border-right:none;font-family:var(--font-mono);font-size:7px;color:var(--accent);letter-spacing:1px;padding:4px 3px;writing-mode:vertical-rl}
+.float-skull-btn{background:var(--dark);border:1px solid var(--border2);border-right:none;color:var(--bone-white);font-size:14px;display:flex;align-items:center;justify-content:center;padding:6px 0;cursor:pointer}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.98);border-top:1px solid var(--border);z-index:200}
+.bottom-collections{display:flex;align-items:stretch;height:54px;border-bottom:1px solid var(--border)}
+.bottom-label{font-family:var(--font-body);font-size:8px;font-weight:500;color:var(--gray);letter-spacing:2px;text-transform:uppercase;padding:0 12px;display:flex;align-items:center;border-right:1px solid var(--border);white-space:nowrap}
+.coll-tabs{display:flex;flex:1}
+.coll-tab{display:flex;align-items:center;gap:10px;padding:0 14px;border-right:1px solid var(--border);cursor:pointer;transition:background .2s;flex:1;position:relative}
+.coll-tab:hover{background:rgba(255,255,255,.02)}
+.coll-tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:transparent;transition:background .3s}
+.coll-tab.active::after{background:var(--tab-active-border)}
+.coll-tab.active{background:rgba(255,255,255,.03)}
+.coll-tab[data-theme="rebel"].active .coll-name{color:#ff6b35}
+.coll-tab[data-theme="lineup"].active .coll-name{color:#ff3fa4}
+.coll-tab[data-theme="chaos"].active .coll-name{color:#00cfff}
+.coll-tab[data-theme="internet"].active .coll-name{color:#9b59ff}
+.coll-tab.locked{cursor:not-allowed;opacity:0.4;position:relative}
+.coll-tab.locked:hover{background:transparent}
+.coll-tab.locked::before{content:'';position:absolute;inset:0;z-index:5}
+.lock-badge{font-family:var(--font-body);font-size:7px;font-weight:500;color:var(--gray2);letter-spacing:1px;display:flex;align-items:center;gap:3px;margin-top:2px;text-transform:uppercase}
+.lock-icon{font-size:8px;opacity:0.6}
+.coll-planet{width:34px;height:34px;border-radius:50%;flex-shrink:0;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.coll-planet img{width:150%;height:150%;object-fit:cover;border-radius:50%}
+.planet-rebel{background:radial-gradient(circle at 35% 35%,#8b2a10,#2a0a05);border:1px solid #5a1a02}
+.planet-lineup{background:radial-gradient(circle at 35% 35%,#cc3080,#4a0a28);border:1px solid #ff3fa4;box-shadow:0 0 12px rgba(255,63,164,.5)}
+.planet-chaos{background:radial-gradient(circle at 35% 35%,#1a5aab,#050a1e);border:1px solid #1a7acc}
+.planet-internet{background:radial-gradient(circle at 35% 35%,#4a2a8b,#080510);border:1px solid #7b4acc}
+.coll-info{font-family:var(--font-body)}
+.coll-num{font-size:8px;font-weight:400;color:var(--gray);display:block;letter-spacing:0.5px}
+.coll-name{font-size:9px;font-weight:600;color:var(--bone-white);display:block;letter-spacing:1px;transition:color .3s;text-transform:uppercase}
+.bottom-status{display:flex;justify-content:space-between;align-items:center;padding:3px 14px;height:20px;font-family:var(--font-mono);font-size:7px;color:var(--gray);letter-spacing:1px}
+.bs-center{font-style:italic;color:#555;font-family:var(--font-body);font-weight:400}
+.scroll-label{position:fixed;left:12px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:var(--font-mono);font-size:7px;letter-spacing:3px;color:var(--gray2);z-index:50;white-space:nowrap}
+
+/* Loading spinner for cards */
+.cards-loading{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;pointer-events:none;background:transparent;}
+.cards-loading-inner{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:3px;animation:blink 1s infinite}
+
+/* =====================================================
+   MOBILE LAYOUT
+===================================================== */
+@media (max-width: 768px) {
+  body{cursor:auto;overflow-y:auto;overflow-x:hidden}
+  .corner{width:12px;height:12px}
+  .scroll-label{display:none}
+  .float-actions{display:none}
+  header{height:60px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;grid-template-columns:unset;}
+  .header-left{gap:8px;z-index:2}
+  .skull-logo{width:44px;height:44px}
+  .header-status{display:none}
+  .header-center{position:absolute;left:50%;transform:translateX(-50%);z-index:1}
+  .brand-name-img{height:42px}
+  .brand-svg{height:44px}
+  .header-right{display:none !important}
+  .cart-btn-mob{display:flex;align-items:center;font-size:11px;letter-spacing:1px;margin-left:auto;margin-right:8px;z-index:2}
+  .hamburger{display:flex;z-index:2}
+  .mob-nav{top:60px}
+  .main{margin-top:60px;display:flex;flex-direction:column;height:auto;overflow:visible;padding-bottom:90px;}
+  .sidebar-icons{display:none}
+  .center-stage{order:1;width:100%;height:72vw;min-height:240px;max-height:420px;position:relative;flex-shrink:0;}
+  .product-card{display:none}
+  .model-img{object-fit:cover;object-position:center bottom}
+  .mob-hero-label{display:none !important;}
+  .mob-hero-coll-tag{font-family:var(--font-body);font-size:8px;font-weight:600;color:var(--collection-label-color);letter-spacing:3px;text-transform:uppercase;padding:3px 7px;background:rgba(0,0,0,0.65);border:1px solid rgba(var(--accent-rgb),0.3);border-bottom:none;backdrop-filter:blur(4px);}
+  .mob-hero-title-overlay{font-family:var(--font-heading);font-weight:700;font-size:42px;line-height:0.88;color:var(--bone-white);letter-spacing:-1px;text-transform:uppercase;padding:4px 7px 6px;background:rgba(0,0,0,0.65);border:1px solid rgba(var(--accent-rgb),0.3);border-top:none;backdrop-filter:blur(4px);}
+  .mob-hero-title-overlay .accent{color:var(--accent);display:block}
+  .mob-signal-badge{position:absolute;top:10px;right:12px;z-index:20;background:rgba(0,0,0,0.7);border:1px solid var(--border2);padding:5px 8px;backdrop-filter:blur(4px);text-align:right;}
+  .mob-signal-dot{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-family:var(--font-mono);font-size:7px;color:var(--acid-yellow);letter-spacing:1px;margin-bottom:2px;}
+  .mob-signal-num{font-family:var(--font-mono);font-size:7px;color:var(--gray);letter-spacing:1px}
+  .mob-banner-bar{position:absolute;bottom:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.78);border-top:1px solid rgba(var(--accent-rgb),0.25);backdrop-filter:blur(6px);padding:6px 12px;}
+  .mob-pieces-info{font-family:var(--font-mono);font-size:8px;color:var(--gray);letter-spacing:1px}
+  .mob-pieces-info span{color:var(--acid-yellow);font-weight:700}
+  .mob-explore-pill{background:transparent;border:1.5px solid var(--btn-color);color:var(--btn-color);font-family:var(--font-body);font-size:10px;font-weight:700;letter-spacing:2px;padding:7px 14px;cursor:pointer;text-transform:uppercase;-webkit-tap-highlight-color:transparent;transition:all 0.2s ease;}
+  .mob-explore-pill:active{background:var(--btn-color);color:var(--void-black)}
+  .left-panel{order:2;border-right:none;border-bottom:1px solid var(--border);padding:14px 14px 16px;overflow:visible;flex-direction:column;gap:0;}
+  .left-panel .collection-label{display:block !important;margin-bottom:6px;}
+  .left-panel .hero-title{display:block !important;font-size:42px;line-height:0.88;margin-bottom:12px;}
+  .left-panel .explore-btn{display:none}
+  .hero-tagline{font-size:9px;line-height:2;margin-top:0;color:var(--bone-white);opacity:0.7;letter-spacing:1.5px;}
+  .system-status{margin-top:12px}
+  .sys-coords{font-size:7px}
+  .mobile-product-grid{display:none !important;}
+  .right-panel{order:4;border-left:none;border-top:1px solid var(--border);overflow:visible;padding:14px 14px;gap:10px}
+  .bottom-bar{position:fixed}
+  .bottom-label{display:none}
+  .bottom-collections{height:54px}
+  .coll-tab{padding:0 10px;gap:8px;min-width:0;display:flex;align-items:center}
+  .coll-planet{width:32px;height:32px;flex-shrink:0}
+  .coll-info{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+  .coll-num{font-size:7.5px;font-weight:600;color:var(--acid-yellow);letter-spacing:1px;display:block}
+  .coll-name{font-size:9.5px;font-weight:700;color:var(--bone-white);letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .lock-badge{display:none}
+  .bottom-status{padding:2px 10px;height:18px}
+  .bs-center{display:none}
+  .bottom-status > div:last-child{display:none}
+}
+
+@media (max-width: 380px) {
+  .mob-hero-title-overlay{font-size:34px}
+  .coll-tab{padding:0 6px;gap:6px}
+  .coll-planet{width:28px;height:28px}
+  .coll-num{font-size:7px}
+  .coll-name{font-size:8.5px;letter-spacing:0}
+  .brand-svg{height:28px}
+}
+
+/* MOB CARD */
+.mob-card{background:#070709;padding:10px;cursor:pointer;transition:background .15s;position:relative;-webkit-tap-highlight-color:transparent;}
+.mob-card:active{background:#0f0f15}
+.mob-card.unavailable{opacity:0.45;cursor:default;pointer-events:none;}
+.mob-card .cc{position:absolute;width:5px;height:5px}
+.mob-card .cc-tl{top:3px;left:3px;border-top:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.mob-card .cc-tr{top:3px;right:3px;border-top:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.mob-card .cc-bl{bottom:3px;left:3px;border-bottom:1px solid var(--gray2);border-left:1px solid var(--gray2)}
+.mob-card .cc-br{bottom:3px;right:3px;border-bottom:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.mob-card .card-num{font-family:var(--font-mono);font-size:8px;color:var(--gray);margin-bottom:6px;display:flex;justify-content:space-between;letter-spacing:1px;align-items:center}
+.mob-card .card-img{width:100%;aspect-ratio:1;border:1px solid var(--border);background:#0d0d12;display:flex;align-items:center;justify-content:center;margin-bottom:7px;overflow:hidden}
+.mob-card .card-img img{width:100%;height:100%;object-fit:cover}
+.mob-card .card-img-placeholder{font-family:var(--font-mono);font-size:8px;color:var(--gray2);text-align:center;letter-spacing:1px;padding:8px;line-height:1.6}
+.mob-card .card-name{font-family:var(--font-body);font-size:8px;font-weight:500;color:var(--bone-white);text-transform:uppercase;letter-spacing:0.5px;line-height:1.4}
+.mob-card .card-price{font-family:var(--font-heading);font-size:17px;font-weight:700;color:var(--bone-white);margin-top:4px;letter-spacing:0.5px}
+.mob-card .card-na{font-family:var(--font-mono);font-size:8px;color:var(--gray2);margin-top:4px;letter-spacing:1px}
+.mob-card .card-add-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin-top:7px;background:transparent;border:1px solid var(--border2);color:var(--gray);font-family:var(--font-body);font-size:8px;font-weight:500;letter-spacing:1px;padding:6px 4px;cursor:pointer;text-transform:uppercase;transition:all .2s;}
+.mob-card .card-add-btn:active{border-color:var(--accent);color:var(--accent)}
+.mob-card .card-plus{color:var(--accent);font-size:15px;line-height:1}
+.mobile-product-grid{display:none}
+</style>
+</head>
+<body class="theme-lineup">
+
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+<div class="scroll-label">SCROLL TO EXPLORE</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="skull-logo"><a href="index.html"><img src="skull3.png" alt="DeadKind Skull" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /></a>
+      <svg style="display:none" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="17" rx="13" ry="12" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+        <ellipse cx="20" cy="17" rx="11" ry="10" fill="#222"/>
+        <ellipse cx="15" cy="16" rx="3.5" ry="3.5" fill="#080808"/>
+        <ellipse cx="25" cy="16" rx="3.5" ry="3.5" fill="#080808"/>
+        <circle cx="15" cy="16" r="1" fill="#333"/><circle cx="25" cy="16" r="1" fill="#333"/>
+        <path d="M19 21 L20 23 L21 21" stroke="#444" stroke-width=".8" fill="none"/>
+        <rect x="13" y="26" width="14" height="7" rx="1" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>
+        <line x1="17" y1="26" x2="17" y2="33" stroke="#444" stroke-width=".8"/>
+        <line x1="20" y1="26" x2="20" y2="33" stroke="#444" stroke-width=".8"/>
+        <line x1="23" y1="26" x2="23" y2="33" stroke="#444" stroke-width=".8"/>
+      </svg>
+    </div>
+    <div class="header-status">
+      <div class="status-online"><span class="status-dot"></span>SYSTEM ONLINE &nbsp;·&nbsp; DK-2050</div>
+      <div>LOCATION &nbsp;·&nbsp; EARTH (TEMP)</div>
+      <div>STATUS &nbsp;·&nbsp; OUTSIDER</div>
+    </div>
+  </div>
+  <div class="header-center">
+    <img src="name.png" class="brand-name-img" alt="DeadKind" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span class="brand-name-fallback" style="display:none">DeadKind</span>
+  </div>
+  <div class="header-right">
+    <nav>
+      <a href="index.html">SHOP</a>
+      <div class="nav-dropdown-wrap">
+        <a href="collection_page.html" target="_blank">COLLECTIONS ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="collection_page.html?subcategory=BEYOND%20THE%20SYSTEM" target="_blank">
+            <span class="drop-num">01</span> BEYOND THE SYSTEM
+          </a>
+          <a href="collection_page.html?subcategory=WHAT%20I%20WANT%20TO%20SAY" target="_blank">
+            <span class="drop-num">02</span> WHAT I WANT TO SAY
+          </a>
+          <div class="drop-divider"></div>
+          <a href="collection_page.html" target="_blank" class="drop-all">
+            VIEW ALL COLLECTIONS →
+          </a>
+        </div>
+      </div>
+      <a href="Archive.html">ARCHIVE</a>
+      <a href="about_page.html">ABOUT</a>
+      <a href="contect.html">CONTACT</a>
+    </nav>
+    <div class="header-divider"></div>
+    <div class="cart-btn" id="cartBtn">CART [ 0 ]</div>
+    <div class="header-plus-btn">+</div>
+  </div>
+  <div class="cart-btn-mob" id="cartBtnMob">[ 0 ]</div>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</header>
+
+<div class="mob-nav" id="mobNav">
+  <a href="index.html">SHOP</a>
+  <div class="mob-nav-group">
+    <a href="collection_page.html" target="_blank" class="mob-nav-parent">COLLECTIONS</a>
+    <div class="mob-nav-sub">
+      <a href="collection_page.html?subcategory=BEYOND%20THE%20SYSTEM" target="_blank" class="mob-sub-item">
+        <span class="sub-num">01</span> BEYOND THE SYSTEM
+      </a>
+      <a href="collection_page.html?subcategory=WHAT%20I%20WANT%20TO%20SAY" target="_blank" class="mob-sub-item">
+        <span class="sub-num">02</span> WHAT I WANT TO SAY
+      </a>
+      <a href="collection_page.html" target="_blank" class="mob-sub-item mob-sub-all">
+        VIEW ALL COLLECTIONS →
+      </a>
+    </div>
+  </div>
+  <a href="Archive.html">ARCHIVE</a>
+  <a href="about_page.html">ABOUT</a>
+  <a href="contect.html">CONTACT</a>
+</div>
+
+<div class="main">
+  <div class="sidebar-icons">
+    <div class="sidebar-icon">✕</div>
+    <div class="sidebar-icon">◎</div>
+    <div class="sidebar-icon">⬜</div>
+    <div class="sidebar-icon">☰</div>
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div>
+      <div class="collection-label" id="collLabel">01ST COLLECTION</div>
+      <div class="hero-title" id="heroTitle">BEYOND THE<span class="accent">SYSTEM</span></div>
+      <div class="hero-tagline">A world beyond conformity<br><br>This imagines a place beyond trends beyond expectations and beyond the rules written by society</div>
+      <button class="explore-btn" onclick="window.location.href='collection_page.html'">EXPLORE COLLECTION &nbsp;+</button>
+    </div>
+    <div class="system-status">
+      <div class="sys-header">SYSTEM STATUS_</div>
+      <div class="sys-body">
+        <div class="sys-skull-box">
+          <svg viewBox="0 0 50 55" fill="none">
+            <ellipse cx="25" cy="22" rx="17" ry="15" fill="none" stroke="#555" stroke-width="0.7"/>
+            <path d="M8 22 Q16 19 25 19 Q34 19 42 22" stroke="#444" stroke-width="0.5" fill="none"/>
+            <path d="M9 26 Q17 23 25 23 Q33 23 41 26" stroke="#444" stroke-width="0.5" fill="none"/>
+            <line x1="25" y1="7" x2="25" y2="37" stroke="#444" stroke-width="0.5"/>
+            <line x1="14" y1="9" x2="12" y2="35" stroke="#333" stroke-width="0.5"/>
+            <line x1="36" y1="9" x2="38" y2="35" stroke="#333" stroke-width="0.5"/>
+            <ellipse cx="18" cy="21" rx="4.5" ry="4.5" fill="none" stroke="#666" stroke-width="0.8"/>
+            <ellipse cx="32" cy="21" rx="4.5" ry="4.5" fill="none" stroke="#666" stroke-width="0.8"/>
+            <path d="M22 27 L25 31 L28 27" stroke="#555" stroke-width="0.8" fill="none"/>
+            <rect x="15" y="36" width="20" height="9" rx="1" fill="none" stroke="#555" stroke-width="0.7"/>
+            <line x1="19" y1="36" x2="19" y2="45" stroke="#444" stroke-width="0.6"/>
+            <line x1="25" y1="36" x2="25" y2="45" stroke="#444" stroke-width="0.6"/>
+            <line x1="31" y1="36" x2="31" y2="45" stroke="#444" stroke-width="0.6"/>
+            <path d="M8 22 L8 30 Q8 36 15 36" stroke="#555" stroke-width="0.7" fill="none"/>
+            <path d="M42 22 L42 30 Q42 36 35 36" stroke="#555" stroke-width="0.7" fill="none"/>
+          </svg>
+        </div>
+        <div class="sys-info">EMOTIONAL<br>SYSTEM<br><span class="highlight">ACTIVE</span></div>
+      </div>
+      <div class="progress-label"><span>EMOTIONAL SYSTEM</span><span class="pval">86%</span></div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <div class="sys-coords">
+        <div>33.6883° N<br>73.0479° E</div>
+        <div>VER. 2.0.5<br>BUILD 0424</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER STAGE -->
+  <div class="center-stage" id="centerStage">
+    <canvas id="bgStarsCanvas"></canvas>
+    <div class="floor-glow" id="floorGlow"></div>
+    <div class="floor-reflect"></div>
+    <div class="model-wrap">
+      <img src="model.png" alt="model" class="model-img" id="modelImg" onerror="this.style.display='none'"/>
+    </div>
+
+    <!-- MOBILE OVERLAYS -->
+    <div class="mob-hero-label">
+      <div class="mob-hero-coll-tag" id="mobCollLabel">01ST COLLECTION</div>
+      <div class="mob-hero-title-overlay" id="mobHeroTitle">BEYOND THE<span class="accent">SYSTEM</span></div>
+    </div>
+    <div class="mob-signal-badge">
+      <div class="mob-signal-dot"><span class="status-dot"></span>LIVE</div>
+      <div class="mob-signal-num" id="mobPiecesNum">08 PIECES</div>
+    </div>
+    <div class="mob-banner-bar">
+      <div class="mob-pieces-info">RELEASE: <span>05.24.25</span> &nbsp;·&nbsp; STATUS: <span>OUTSIDER</span></div>
+      <button class="mob-explore-pill" onclick="window.open('collection_page.html', '_blank')">EXPLORE COLLECTION +</button>
+    </div>
+
+    <canvas id="orbitCanvas"></canvas>
+  </div>
+
+  <!-- MOBILE PRODUCT GRID -->
+  <div class="mobile-product-grid" id="mobileGrid"></div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="panel-box">
+      <div class="panel-hdr"><span>SIGNAL FEED</span><span class="panel-num">001</span></div>
+      <div class="signal-img"><img src="earth.png" alt="Earth Signal" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="signal-text">SOMETHING BEAUTIFUL<br>DIED TO MAKE SPACE<br>FOR US.</div>
+      <div class="signal-link">VIEW SIGNAL &nbsp;▌▌▌▌ →</div>
+    </div>
+    <div class="panel-box">
+      <div class="panel-hdr"><span>COLLECTION DATA</span><span class="panel-num">02</span></div>
+      <div class="data-row"><span>PIECES</span><span class="data-val" id="piecesCount">—</span></div>
+      <div class="data-row"><span>RELEASE DATE</span><span class="data-val acc">05.24.25</span></div>
+      <div class="data-row"><span>LOCATION</span><span class="data-val">EARTH (TEMP)</span></div>
+      <div class="data-row"><span>STATUS</span><span class="data-val">OUTSIDER</span></div>
+      <div class="view-link" onclick="window.location.href='index.html'">VIEW ALL PRODUCTS <span style="color:var(--acid-yellow)">→</span></div>
+    </div>
+    <div class="panel-box">
+      <div class="join-title">JOIN THE FREQUENCY_</div>
+      <div class="join-text">Get early access, secret drops<br>and exclusive chaos.</div>
+      <div class="email-row">
+        <input type="email" placeholder="ENTER EMAIL">
+        <button class="email-sub">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="float-actions">
+  <button class="float-btn">+</button>
+  <div class="float-barcode">DK-2050</div>
+  <button class="float-skull-btn">💀</button>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bottom-collections">
+    <div class="bottom-label">// COLLECTIONS_</div>
+    <div class="coll-tabs">
+      <div class="coll-tab active" data-theme="rebel" data-subcategory-name="BEYOND THE SYSTEM">
+        <div class="coll-planet planet-rebel"><img src="p1.png" onerror="this.style.display='none'"></div>
+        <div class="coll-info"><span class="coll-num">01</span><span class="coll-name">BEYOND THE SYSTEM</span></div>
+      </div>
+      <div class="coll-tab" data-theme="lineup" data-subcategory-name="WHAT I WANT TO SAY">
+        <div class="coll-planet planet-lineup"><img src="p3.png" onerror="this.style.display='none'"></div>
+        <div class="coll-info"><span class="coll-num">02</span><span class="coll-name">WHAT I WANT TO SAY</span></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="bottom-status">
+    <div>DK-2050 &nbsp;+&nbsp; ▌▌▌▌▌▌▌▌ &nbsp;UNKNOWN SIGNAL</div>
+    <div class="bs-center">DEAD INSIDE. ALIVE ANYWAY.</div>
+    <div>© DEADKIND 2050 &nbsp; ALL RIGHTS REBELLED.</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBuT6ltm6tu6YUstmOT83wOjMN3qGzqgW8",
+  authDomain: "esportstournamentapp-a517e.firebaseapp.com",
+  projectId: "esportstournamentapp-a517e",
+  storageBucket: "esportstournamentapp-a517e.firebasestorage.app",
+  messagingSenderId: "367926279367",
+  appId: "1:367926279367:web:86e8a186b0ead614a952e2",
+  measurementId: "G-FJ4SYP99XH"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ── State ──
+let allProducts = [];
+let allSubcategories = [];
+let cartCount = 0;
+let currentSubcategoryId = null;
+
+// ── Load all products & subcategories on boot ──
+async function bootstrap() {
+  try {
+    // Load subcategories
+    const subSnap = await getDocs(collection(db, 'subcategories'));
+    subSnap.forEach(doc => {
+      allSubcategories.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Load all products
+    const prodSnap = await getDocs(collection(db, 'products'));
+    prodSnap.forEach(doc => {
+      allProducts.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Default: show active collection tab (active on load)
+    const activeTab = document.querySelector('.coll-tab.active');
+    if (activeTab) {
+      const subName = activeTab.dataset.subcategoryName;
+      await switchCollection(subName, activeTab.dataset.theme);
+    }
+  } catch(e) {
+    console.error('Firebase error:', e);
+    renderCards([]);
+  }
+}
+
+// ── Switch collection: find subcategory by name, filter products ──
+async function switchCollection(subcategoryName, theme) {
+  // Find subcategory id by name (case insensitive match)
+  const sub = allSubcategories.find(s =>
+    (s.name || '').toUpperCase().trim() === (subcategoryName || '').toUpperCase().trim()
+  );
+  currentSubcategoryId = sub ? sub.id : null;
+
+  let filtered = [];
+  if (currentSubcategoryId) {
+    filtered = allProducts.filter(p => p.subcategoryId === currentSubcategoryId);
+  } else {
+    // fallback: show hero products from any collection
+    filtered = allProducts.filter(p => p.hero === true);
+  }
+
+  // Sort: hero=true first, then random among non-hero
+  const heroProds = filtered.filter(p => p.hero === true);
+  const nonHeroProds = filtered.filter(p => p.hero !== true);
+
+  // Shuffle non-hero
+  for (let i = nonHeroProds.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [nonHeroProds[i], nonHeroProds[j]] = [nonHeroProds[j], nonHeroProds[i]];
+  }
+
+  const sorted = [...heroProds, ...nonHeroProds];
+
+  // Update piece count
+  const total = sorted.length;
+  document.getElementById('piecesCount').textContent = total;
+  document.getElementById('mobPiecesNum').textContent = total + ' PIECES';
+
+  renderCards(sorted);
+  renderMobileGrid(sorted);
+}
+
+// ── Get display image for product ──
+function getProductImage(p) {
+  if (p.colourImages && Object.keys(p.colourImages).length) {
+    const fc = Object.keys(p.colourImages)[0];
+    if (p.colourImages[fc]?.length) return p.colourImages[fc][0];
+  }
+  if (p.images?.length) return p.images[0];
+  return null;
+}
+
+// ── Open product page ──
+function openProduct(p) {
+  localStorage.setItem('selectedProduct', JSON.stringify(p));
+  window.location.href = `product_page.html?id=${p.id}`;
+}
+
+// ── Render 8 desktop cards ──
+function renderCards(products) {
+  for (let i = 0; i < 8; i++) {
+    const card = document.getElementById(`dcard-${i}`);
+    if (!card) continue;
+    const imgEl = document.getElementById(`dcard-img-${i}`);
+    const nameEl = document.getElementById(`dcard-name-${i}`);
+    const priceEl = document.getElementById(`dcard-price-${i}`);
+    const numEl = document.getElementById(`dcard-num-${i}`);
+
+    const p = products[i];
+    numEl.textContent = String(i + 1).padStart(2, '0');
+
+    if (!p) {
+      // Not available slot
+      card.classList.add('unavailable');
+      card.onclick = null;
+      imgEl.innerHTML = `<div class="card-img-placeholder">NOT<br>AVAILABLE</div>`;
+      nameEl.textContent = '— N/A —';
+      priceEl.innerHTML = `<span class="card-na">UNAVAILABLE</span>`;
+      continue;
+    }
+
+    card.classList.remove('unavailable');
+    const img = getProductImage(p);
+    imgEl.innerHTML = img
+      ? `<img src="${img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="card-img-placeholder" style="display:none">NO IMAGE</div>`
+      : `<div class="card-img-placeholder">${p.name}</div>`;
+
+    nameEl.textContent = (p.name || 'UNNAMED').toUpperCase();
+    priceEl.innerHTML = `₹${(p.price||0).toLocaleString('en-IN')}`;
+
+    card.onclick = () => openProduct(p);
+  }
+}
+
+// ── Render mobile grid ──
+function renderMobileGrid(products) {
+  const grid = document.getElementById('mobileGrid');
+  grid.innerHTML = '';
+
+  for (let i = 0; i < 8; i++) {
+    const p = products[i];
+    const card = document.createElement('div');
+    card.className = 'mob-card' + (!p ? ' unavailable' : '');
+
+    if (!p) {
+      card.innerHTML = `
+        <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+        <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+        <div class="card-num"><span>${String(i+1).padStart(2,'0')}</span></div>
+        <div class="card-img"><div class="card-img-placeholder">NOT<br>AVAILABLE</div></div>
+        <div class="card-name">— N/A —</div>
+        <div class="card-na">UNAVAILABLE</div>`;
+      grid.appendChild(card);
+      continue;
+    }
+
+    const img = getProductImage(p);
+    const imgHtml = img
+      ? `<img src="${img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="card-img-placeholder" style="display:none">NO IMAGE</div>`
+      : `<div class="card-img-placeholder">${p.name || 'UNNAMED'}</div>`;
+
+    card.innerHTML = `
+      <div class="cc cc-tl"></div><div class="cc cc-tr"></div>
+      <div class="cc cc-bl"></div><div class="cc cc-br"></div>
+      <div class="card-num"><span>${String(i+1).padStart(2,'0')}</span><span class="card-plus">+</span></div>
+      <div class="card-img">${imgHtml}</div>
+      <div class="card-name">${(p.name||'UNNAMED').toUpperCase()}</div>
+      <div class="card-price">₹${(p.price||0).toLocaleString('en-IN')}</div>
+      <button class="card-add-btn">ADD TO CART &nbsp;<span class="card-plus">+</span></button>`;
+
+    card.querySelector('.card-add-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      addToCart(p);
+    });
+    card.addEventListener('click', () => openProduct(p));
+    grid.appendChild(card);
+  }
+}
+
+// ── Cart ──
+function addToCart(p) {
+  cartCount++;
+  document.getElementById('cartBtn').textContent = `CART [ ${cartCount} ]`;
+  document.getElementById('cartBtnMob').textContent = `[ ${cartCount} ]`;
+  const mob = document.getElementById('cartBtnMob');
+  mob.style.borderColor = 'var(--accent)';
+  mob.style.color = 'var(--accent)';
+  setTimeout(() => { mob.style.borderColor = ''; mob.style.color = ''; }, 600);
+}
+window.addToCart = addToCart;
+
+// ── Collection tab switching ──
+const themes = {
+  rebel:    { label:'01ST COLLECTION', t1:'BEYOND THE', t2:'SYSTEM'  },
+  lineup:   { label:'02ND COLLECTION', t1:'WHAT I',     t2:'WANT TO SAY'  }
+};
+
+document.querySelectorAll('.coll-tab').forEach(tab => {
+  tab.addEventListener('click', async () => {
+    if (tab.classList.contains('locked')) return;
+    const subName = tab.dataset.subcategoryName;
+    window.open(`collection_page.html?subcategory=${encodeURIComponent(subName)}`, '_blank');
+  });
+});
+
+// ── Hamburger ──
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobNav').classList.toggle('open');
+});
+
+// ── Background stars ──
+const bgCanvas = document.getElementById('bgStarsCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+const stage = document.getElementById('centerStage');
+function resizeBg(){ bgCanvas.width=stage.offsetWidth; bgCanvas.height=stage.offsetHeight; }
+resizeBg();
+const bgStars = Array.from({length:160},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.2+0.2,phase:Math.random()*Math.PI*2,speed:Math.random()*0.006+0.002}));
+function drawBgStars(){
+  bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+  bgStars.forEach(s=>{
+    s.phase+=s.speed;
+    const alpha=(Math.sin(s.phase)*0.5+0.5)*0.7;
+    bgCtx.beginPath();bgCtx.arc(s.x*bgCanvas.width,s.y*bgCanvas.height,s.r,0,Math.PI*2);
+    bgCtx.fillStyle=`rgba(255,255,255,${alpha})`;bgCtx.fill();
+  });
+  requestAnimationFrame(drawBgStars);
+}
+drawBgStars();
+
+// ── Orbit canvas ──
+const canvas = document.getElementById('orbitCanvas');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=stage.offsetWidth; canvas.height=stage.offsetHeight; }
+resize();
+window.addEventListener('resize', ()=>{ resize(); resizeBg(); });
+
+const NUM_WAVES=9;
+const waveRings=Array.from({length:NUM_WAVES},(_,i)=>({
+  baseRx:0.15+i*0.045,baseRy:0.05+i*0.014,
+  tiltX:(Math.random()-0.5)*0.3,tiltY:(Math.random()-0.5)*0.2,
+  rotAngle:(Math.random()-0.5)*0.6,
+  waveAmp:0.012+Math.random()*0.018,waveFreq:2+Math.floor(Math.random()*4),
+  phase:Math.random()*Math.PI*2,
+  speed:(0.008+Math.random()*0.012)*(Math.random()>0.5?1:-1),
+  driftPhase:Math.random()*Math.PI*2,
+  driftAmpX:0.01+Math.random()*0.02,driftAmpY:0.008+Math.random()*0.015,
+  driftSpeed:0.003+Math.random()*0.005,
+  alpha:0.15+Math.random()*0.25,
+  color:i%3===0?[255,63,164]:i%3===1?[255,120,200]:[200,50,140],
+  stars:Array.from({length:4+Math.floor(Math.random()*8)},()=>({t:Math.random(),r:Math.random()*2+0.5,phase:Math.random()*Math.PI*2,speed:0.01+Math.random()*0.02}))
+}));
+
+function getRingPoint(ring,t,W,H,cx,cy,time){
+  const a=t*Math.PI*2;
+  const wave=1+ring.waveAmp*Math.sin(ring.waveFreq*a+ring.phase+time*Math.abs(ring.speed)*60);
+  const dx=Math.sin(ring.driftPhase+time*ring.driftSpeed)*ring.driftAmpX*W;
+  const dy=Math.cos(ring.driftPhase*1.3+time*ring.driftSpeed*0.7)*ring.driftAmpY*H;
+  const cosR=Math.cos(ring.rotAngle),sinR=Math.sin(ring.rotAngle);
+  const ex=Math.cos(a)*W*ring.baseRx*wave;
+  const ey=Math.sin(a)*H*ring.baseRy*wave;
+  const rx=ex*cosR-ey*sinR;const ry=ex*sinR+ey*cosR;
+  return{x:cx+rx+dx,y:cy+H*0.22+ry+dy};
+}
+let accentColor=[255,63,164];
+function getAccentRGB(){
+  const rgb=getComputedStyle(document.body).getPropertyValue('--accent-rgb').trim();
+  if(rgb){const p=rgb.split(',').map(Number);if(p.length===3)return p;}
+  return[255,63,164];
+}
+let tAnim=0;
+function drawOrbit(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H*0.14;
+  accentColor=getAccentRGB();
+  waveRings.forEach(ring=>{
+    ring.phase+=ring.speed;ring.driftPhase+=ring.driftSpeed*0.5;
+    const[cr,cg,cb]=ring.color.map((c,i)=>Math.round(c*0.5+accentColor[i]*0.5));
+    const steps=80;
+    ctx.beginPath();
+    for(let i=0;i<=steps;i++){const pt=getRingPoint(ring,i/steps,W,H,cx,cy,tAnim);if(i===0)ctx.moveTo(pt.x,pt.y);else ctx.lineTo(pt.x,pt.y);}
+    ctx.closePath();
+    ctx.strokeStyle=`rgba(${cr},${cg},${cb},${ring.alpha})`;ctx.lineWidth=0.8;ctx.stroke();
+    ring.stars.forEach(star=>{
+      star.t=(star.t+star.speed*0.001)%1;star.phase+=0.04;
+      const pt=getRingPoint(ring,star.t,W,H,cx,cy,tAnim);
+      const pulse=0.4+0.6*Math.abs(Math.sin(star.phase));
+      ctx.beginPath();ctx.arc(pt.x,pt.y,star.r*pulse,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,220,240,${Math.min(1,ring.alpha*4*pulse)})`;ctx.fill();
+    });
+  });
+  tAnim+=0.016;
+  requestAnimationFrame(drawOrbit);
+}
+drawOrbit();
+
+// ── Boot ──
+bootstrap();
+</script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dead'Kind — Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card-bg: #0e0e0e;
+  --surface: #111;
+  --surface2: #161616;
+  --accent: #c45486;
+  --accent-dim: rgba(196,84,134,0.10);
+  --green: #39e75f;
+  --yellow: #e8e83a;
+  --red: #e74c4c;
+  --text: #ffffff;
+  --text-dim: #888;
+  --text-muted: #444;
+  --border: #1c1c1c;
+  --border-mid: #2a2a2a;
+  --mono: 'Share Tech Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Rajdhani', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;min-height:100vh;overflow-x:hidden;}
+button{cursor:pointer;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+
+/* SCANLINE */
+.scanline{position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9999;}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:#080808;border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 20px;gap:0;}
+.nav-logo{font-family:var(--display);font-size:22px;color:var(--text);text-decoration:none;letter-spacing:.02em;margin-right:auto;}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:22px;list-style:none;}
+.nav-links a{font-family:var(--mono);font-size:11px;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.nav-status{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.08em;}
+.status-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulseGreen 2s infinite;}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 rgba(57,231,95,.4);}50%{box-shadow:0 0 0 5px rgba(57,231,95,0);}}
+.nav-btn{font-family:var(--mono);font-size:10px;letter-spacing:.1em;border:1px solid var(--border-mid);background:none;color:var(--text-dim);padding:6px 14px;transition:all .2s;}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+.nav-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+
+/* ═══════════════════════════════════
+   AUTH SCREENS
+══════════════════════════════════ */
+#authScreen{display:flex;min-height:calc(100vh - 52px);align-items:center;justify-content:center;padding:40px 20px;}
+#authScreen.hidden{display:none;}
+
+.auth-wrap{width:100%;max-width:440px;}
+.auth-tag{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.12em;margin-bottom:8px;}
+.auth-title{font-family:var(--display);font-size:56px;line-height:.9;letter-spacing:.02em;margin-bottom:6px;}
+.auth-title span{color:var(--accent);}
+.auth-subtitle{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:30px;}
+
+.auth-tabs{display:flex;gap:0;border-bottom:1px solid var(--border-mid);margin-bottom:28px;}
+.auth-tab{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:10px 20px;background:none;border:none;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .2s;cursor:pointer;}
+.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+.auth-form{display:flex;flex-direction:column;gap:16px;}
+.auth-form.hidden{display:none;}
+
+.f-group{display:flex;flex-direction:column;gap:6px;}
+.f-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center;}
+.f-input{background:#0c0c0c;border:1px solid var(--border-mid);color:var(--text);font-family:var(--mono);font-size:12px;padding:12px 14px;outline:none;transition:border-color .2s,background .2s;letter-spacing:.04em;width:100%;}
+.f-input::placeholder{color:var(--text-muted);}
+.f-input:focus{border-color:var(--accent);background:rgba(196,84,134,.04);}
+.f-input.err{border-color:var(--red);}
+.f-err{font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:.06em;display:none;}
+.f-err.show{display:block;}
+
+.phone-row{display:flex;gap:0;}
+.phone-code{background:#111;border:1px solid var(--border-mid);border-right:none;color:var(--text-dim);font-family:var(--mono);font-size:12px;padding:12px 12px;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;}
+
+.btn-auth{font-family:var(--mono);font-size:11px;letter-spacing:.12em;background:var(--accent);border:none;color:#000;padding:14px 28px;transition:all .2s;position:relative;overflow:hidden;width:100%;margin-top:4px;}
+.btn-auth:hover{background:#d4659a;}
+.btn-auth:disabled{opacity:.5;cursor:not-allowed;}
+.btn-shimmer{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 2.5s infinite;pointer-events:none;}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+
+.auth-divider{display:flex;align-items:center;gap:12px;margin:4px 0;}
+.auth-divider span{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:.1em;white-space:nowrap;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border-mid);}
+
+.auth-switch{font-family:var(--mono);font-size:9px;color:var(--text-muted);text-align:center;letter-spacing:.06em;}
+.auth-switch button{background:none;border:none;color:var(--accent);font-family:var(--mono);font-size:9px;letter-spacing:.06em;cursor:pointer;text-decoration:underline;}
+
+.auth-msg{font-family:var(--mono);font-size:9px;padding:10px 14px;border:1px solid;letter-spacing:.06em;display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.success{border-color:var(--green);color:var(--green);background:rgba(57,231,95,.05);}
+.auth-msg.error{border-color:var(--red);color:var(--red);background:rgba(231,76,60,.05);}
+.auth-msg.info{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+
+/* ═══════════════════════════════════
+   PROFILE SCREEN
+══════════════════════════════════ */
+#profileScreen{display:none;}
+#profileScreen.active{display:block;}
+
+.profile-wrap{max-width:1300px;margin:0 auto;padding:28px 20px;}
+
+/* PROFILE HEADER */
+.profile-header{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:start;padding:24px;border:1px solid var(--border);background:var(--surface);margin-bottom:20px;position:relative;}
+.profile-header::before{content:'// PROFILE_';position:absolute;top:-1px;left:16px;background:var(--surface);padding:0 8px;font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em;transform:translateY(-50%);}
+
+.profile-avatar{width:80px;height:80px;border:2px solid var(--border-mid);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:36px;color:var(--accent);flex-shrink:0;position:relative;}
+.avatar-ring{position:absolute;inset:-4px;border:1px solid var(--accent);opacity:.4;animation:rotateRing 8s linear infinite;}
+@keyframes rotateRing{to{transform:rotate(360deg);}}
+
+.profile-info{}
+.profile-name{font-family:var(--display);font-size:36px;letter-spacing:.04em;line-height:1;margin-bottom:4px;}
+.profile-email{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:10px;}
+.profile-meta{display:flex;flex-wrap:wrap;gap:16px;}
+.profile-meta-item{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.06em;}
+.profile-meta-item span{color:var(--text);}
+
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.profile-stat{background:var(--surface2);padding:14px 18px;text-align:center;}
+.stat-num{font-family:var(--display);font-size:28px;color:var(--accent);letter-spacing:.06em;line-height:1;}
+.stat-lbl{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:.1em;margin-top:3px;}
+
+/* TABS */
+.profile-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.ptab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:12px 20px;background:none;border:none;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .2s;cursor:pointer;white-space:nowrap;}
+.ptab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.ptab:hover:not(.active){color:var(--text);}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ORDERS */
+.section-tag{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.12em;margin-bottom:8px;}
+.section-title{font-family:var(--display);font-size:28px;letter-spacing:.04em;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'_';color:var(--accent);animation:blink 1.2s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.orders-list{display:flex;flex-direction:column;gap:12px;}
+.order-card{border:1px solid var(--border);background:var(--surface);transition:border-color .2s;cursor:pointer;position:relative;overflow:hidden;}
+.order-card:hover{border-color:rgba(196,84,134,.4);}
+.order-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:0;transition:opacity .2s;}
+.order-card:hover::before{opacity:1;}
+.order-card-header{display:flex;align-items:center;gap:16px;padding:16px 20px;flex-wrap:wrap;}
+.order-id{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.08em;}
+.order-name{font-family:var(--mono);font-size:11px;letter-spacing:.04em;flex:1;}
+.order-price{font-family:var(--mono);font-size:13px;color:var(--accent);}
+.order-date{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.06em;}
+.order-status{font-family:var(--mono);font-size:9px;padding:3px 10px;letter-spacing:.08em;}
+.status-delivered{background:rgba(57,231,95,.1);color:var(--green);border:1px solid rgba(57,231,95,.3);}
+.status-shipped{background:rgba(232,232,58,.1);color:var(--yellow);border:1px solid rgba(232,232,58,.3);}
+.status-confirmed{background:rgba(196,84,134,.1);color:var(--accent);border:1px solid rgba(196,84,134,.3);}
+.status-pending{background:rgba(136,136,136,.1);color:var(--text-dim);border:1px solid var(--border-mid);}
+.status-cancelled{background:rgba(231,76,60,.1);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+.order-arrow{font-family:var(--mono);font-size:14px;color:var(--text-muted);transition:all .2s;margin-left:auto;}
+.order-card:hover .order-arrow{color:var(--accent);transform:translateX(4px);}
+
+.order-items-preview{padding:0 20px 14px;display:flex;gap:8px;flex-wrap:wrap;}
+.order-item-chip{font-family:var(--mono);font-size:8px;letter-spacing:.06em;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);}
+
+/* ORDER DETAIL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border-mid);width:100%;max-width:680px;max-height:90vh;overflow-y:auto;animation:modalIn .25s ease;position:relative;}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:2;}
+.modal-head-tag{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-bottom:4px;}
+.modal-head-title{font-family:var(--display);font-size:24px;letter-spacing:.04em;}
+.modal-close{background:none;border:1px solid var(--border);color:var(--text-muted);width:32px;height:32px;font-family:var(--mono);font-size:14px;transition:all .2s;}
+.modal-close:hover{border-color:var(--accent);color:var(--accent);}
+.modal-body{padding:24px;}
+
+/* ORDER STATUS TIMELINE */
+.timeline{margin-bottom:24px;}
+.timeline-title{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-bottom:14px;}
+.timeline-items{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:16px;position:relative;}
+.tl-item:not(:last-child) .tl-line{position:absolute;left:7px;top:16px;bottom:-8px;width:1px;background:var(--border-mid);}
+.tl-item:not(:last-child).done .tl-line{background:var(--green);}
+.tl-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border-mid);flex-shrink:0;margin-top:2px;position:relative;z-index:1;background:var(--surface);}
+.tl-item.done .tl-dot{border-color:var(--green);background:rgba(57,231,95,.15);}
+.tl-item.active .tl-dot{border-color:var(--accent);background:var(--accent-dim);animation:pulseDot 2s infinite;}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(196,84,134,.4);}50%{box-shadow:0 0 0 5px rgba(196,84,134,0);}}
+.tl-content{padding-bottom:14px;}
+.tl-step{font-family:var(--mono);font-size:10px;letter-spacing:.06em;margin-bottom:3px;}
+.tl-item.done .tl-step{color:var(--green);}
+.tl-item.active .tl-step{color:var(--accent);}
+.tl-item.pending .tl-step{color:var(--text-muted);}
+.tl-time{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:.04em;}
+
+.od-section{margin-bottom:20px;}
+.od-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.od-items{display:flex;flex-direction:column;gap:8px;}
+.od-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.od-item:last-child{border-bottom:none;}
+.od-item-img{width:48px;height:48px;background:var(--surface2);border:1px solid var(--border);flex-shrink:0;object-fit:cover;}
+.od-item-info{flex:1;}
+.od-item-name{font-family:var(--mono);font-size:10px;letter-spacing:.04em;margin-bottom:3px;}
+.od-item-meta{font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:.04em;}
+.od-item-price{font-family:var(--mono);font-size:11px;color:var(--accent);}
+.od-row{display:flex;justify-content:space-between;padding:7px 0;font-family:var(--mono);font-size:10px;border-bottom:1px solid var(--border);letter-spacing:.06em;}
+.od-row .lbl{color:var(--text-muted);}
+.od-row.total{border-bottom:none;margin-top:4px;}
+.od-row.total .lbl{color:var(--text);font-size:12px;}
+.od-row.total .val{color:var(--accent);font-size:14px;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-icon{font-family:var(--display);font-size:64px;color:var(--border-mid);letter-spacing:.04em;margin-bottom:12px;}
+.empty-msg{font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:.08em;margin-bottom:20px;}
+.empty-cta{font-family:var(--mono);font-size:10px;letter-spacing:.1em;border:1px solid var(--accent);background:none;color:var(--accent);padding:12px 24px;transition:all .2s;text-decoration:none;display:inline-block;}
+.empty-cta:hover{background:var(--accent);color:#000;}
+
+/* LOADING */
+.loading-row{display:flex;flex-direction:column;gap:10px;padding:20px 0;}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:skelAnim 1.4s infinite;height:70px;border:1px solid var(--border);}
+@keyframes skelAnim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* LOGOUT */
+.btn-logout{font-family:var(--mono);font-size:10px;letter-spacing:.1em;background:none;border:1px solid var(--border-mid);color:var(--text-muted);padding:8px 16px;transition:all .2s;}
+.btn-logout:hover{border-color:var(--red);color:var(--red);}
+
+/* FOOTER */
+.footer{height:32px;border-top:1px solid var(--border);display:flex;align-items:center;padding:0 20px;background:#080808;margin-top:40px;}
+.footer-coords{font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:.06em;}
+.footer-tagline{font-family:var(--mono);font-size:10px;color:var(--yellow);letter-spacing:.12em;animation:taglineGlow 3s ease-in-out infinite;margin-left:auto;}
+@keyframes taglineGlow{0%,100%{opacity:1;}50%{opacity:.6;}}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:20px;background:#111;border:1px solid var(--accent);padding:10px 16px;font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.06em;z-index:9998;transform:translateY(12px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .profile-header{grid-template-columns:auto 1fr;grid-template-rows:auto auto;}
+  .profile-stats{grid-column:1/-1;}
+  .nav-links{display:none;}
+  .ptab{padding:10px 14px;font-size:9px;}
+  .profile-header{padding:16px;}
+  .profile-name{font-size:28px;}
+  .profile-stats{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:480px){
+  .order-card-header{gap:10px;}
+  .order-name{font-size:10px;}
+  .modal{max-height:100vh;border-radius:0;}
+  .profile-stats{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Dead<span>'</span>Kind</a>
+  <ul class="nav-links">
+    <li><a href="index.html">SHOP</a></li>
+    <li><a href="collection_page.html">COLLECTIONS</a></li>
+    <li><a href="#">ARCHIVE</a></li>
+    <li><a href="#">ABOUT</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-status" id="navStatus" style="display:none;"><span class="status-dot"></span>LOGGED IN</div>
+    <button class="btn-logout" id="navLogout" style="display:none;" onclick="logout()">LOGOUT</button>
+  </div>
+</nav>
+
+<!-- ══════════ AUTH SCREEN ══════════ -->
+<div id="authScreen">
+  <div class="auth-wrap">
+    <div class="auth-tag">// IDENTITY_</div>
+    <div class="auth-title">ACCESS<br><span>PORTAL.</span></div>
+    <div class="auth-subtitle">AUTHENTICATE TO CONTINUE_</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">LOGIN</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">SIGN UP</button>
+    </div>
+
+    <div id="authMsg" class="auth-msg"></div>
+
+    <!-- LOGIN FORM -->
+    <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+      <div class="f-group">
+        <label class="f-label">EMAIL ADDRESS <span style="color:var(--accent)">*</span></label>
+        <input class="f-input" type="email" id="loginEmail" placeholder="DEAD@KIND.COM" autocomplete="email" required>
+        <span class="f-err" id="loginEmailErr"></span>
+      </div>
+      <div class="f-group">
+        <label class="f-label">
+          PASSWORD <span style="color:var(--accent)">*</span>
+          <button type="button" style="background:none;border:none;font-family:var(--mono);font-size:8px;color:var(--text-muted);letter-spacing:.06em;cursor:pointer;" onclick="showForgot()">FORGOT?</button>
+        </label>
+        <input class="f-input" type="password" id="loginPass" placeholder="••••••••••" autocomplete="current-password" required>
+        <span class="f-err" id="loginPassErr"></span>
+      </div>
+      <button type="submit" class="btn-auth" id="loginBtn">
+        <div class="btn-shimmer"></div>
+        <span id="loginBtnTxt">LOGIN_</span>
+      </button>
+      <div class="auth-switch">NEW HERE? <button type="button" onclick="switchTab('signup')">CREATE ACCOUNT →</button></div>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form class="auth-form hidden" id="signupForm" onsubmit="handleSignup(event)">
+      <div class="f-group">
+        <label class="f-label">EMAIL ADDRESS <span style="color:var(--accent)">*</span></label>
+        <input class="f-input" type="email" id="signupEmail" placeholder="DEAD@KIND.COM" autocomplete="email" required>
+        <span class="f-err" id="signupEmailErr"></span>
+      </div>
+      <div class="f-group">
+        <label class="f-label">MOBILE NUMBER <span style="color:var(--accent)">*</span></label>
+        <div class="phone-row">
+          <span class="phone-code">+91</span>
+          <input class="f-input" type="tel" id="signupPhone" placeholder="9876543210" maxlength="10" autocomplete="tel" required>
+        </div>
+        <span class="f-err" id="signupPhoneErr"></span>
+      </div>
+      <div class="f-group">
+        <label class="f-label">PASSWORD <span style="color:var(--accent)">*</span><span style="color:var(--text-muted);font-size:8px;">MIN 6 CHARS</span></label>
+        <input class="f-input" type="password" id="signupPass" placeholder="CREATE PASSWORD" autocomplete="new-password" required>
+        <span class="f-err" id="signupPassErr"></span>
+      </div>
+      <div class="f-group">
+        <label class="f-label">CONFIRM PASSWORD <span style="color:var(--accent)">*</span></label>
+        <input class="f-input" type="password" id="signupPass2" placeholder="CONFIRM PASSWORD" autocomplete="new-password" required>
+        <span class="f-err" id="signupPass2Err"></span>
+      </div>
+      <button type="submit" class="btn-auth" id="signupBtn">
+        <div class="btn-shimmer"></div>
+        <span id="signupBtnTxt">CREATE ACCOUNT_</span>
+      </button>
+      <div class="auth-switch">ALREADY REGISTERED? <button type="button" onclick="switchTab('login')">LOGIN →</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════ PROFILE SCREEN ══════════ -->
+<div id="profileScreen">
+  <div class="profile-wrap">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">
+        <div class="avatar-ring"></div>
+        <span id="avatarLetter">?</span>
+      </div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">LOADING...</div>
+        <div class="profile-email" id="profileEmail">—</div>
+        <div class="profile-meta">
+          <div class="profile-meta-item">PHONE: <span id="profilePhone">—</span></div>
+          <div class="profile-meta-item">STATUS: <span style="color:var(--green)">OUTSIDER</span></div>
+          <div class="profile-meta-item">MEMBER SINCE: <span id="profileSince">—</span></div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="stat-num" id="statOrders">0</div>
+          <div class="stat-lbl">ORDERS</div>
+        </div>
+        <div class="profile-stat">
+          <div class="stat-num" id="statDelivered">0</div>
+          <div class="stat-lbl">DELIVERED</div>
+        </div>
+        <div class="profile-stat">
+          <div class="stat-num" id="statPending">0</div>
+          <div class="stat-lbl">IN TRANSIT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="profile-tabs">
+      <button class="ptab active" data-tab="orders">ORDERS</button>
+      <button class="ptab" data-tab="account">ACCOUNT</button>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="tab-panel active" id="tab-orders">
+      <div class="section-tag">// ORDER_HISTORY</div>
+      <div class="section-title">YOUR ORDERS</div>
+      <div id="ordersContainer">
+        <div class="loading-row">
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT TAB -->
+    <div class="tab-panel" id="tab-account">
+      <div class="section-tag">// ACCOUNT_DETAILS</div>
+      <div class="section-title">ACCOUNT</div>
+      <div style="border:1px solid var(--border);padding:24px;background:var(--surface);max-width:500px;">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <div class="od-label">EMAIL</div>
+            <div style="font-family:var(--mono);font-size:12px;" id="acEmail">—</div>
+          </div>
+          <div>
+            <div class="od-label">MOBILE</div>
+            <div style="font-family:var(--mono);font-size:12px;" id="acPhone">—</div>
+          </div>
+          <div>
+            <div class="od-label">ACCOUNT ID</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--text-muted);" id="acUid">—</div>
+          </div>
+          <div style="margin-top:8px;">
+            <button class="btn-logout" onclick="logout()" style="width:100%;padding:12px;font-size:11px;letter-spacing:.12em;">LOGOUT →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-coords">DEAD'KIND — DK-2050</div>
+  <div class="footer-tagline">DEAD INSIDE. ALIVE ANYWAY.</div>
+</footer>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-tag">// ORDER_DETAILS</div>
+        <div class="modal-head-title" id="modalOrderId">ORDER #—</div>
+      </div>
+      <button class="modal-close" onclick="closeOrderModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE + AUTH -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  or,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBuT6ltm6tu6YUstmOT83wOjMN3qGzqgW8",
+  authDomain: "esportstournamentapp-a517e.firebaseapp.com",
+  projectId: "esportstournamentapp-a517e",
+  storageBucket: "esportstournamentapp-a517e.firebasestorage.app",
+  messagingSenderId: "367926279367",
+  appId: "1:367926279367:web:86e8a186b0ead614a952e2",
+  measurementId: "G-FJ4SYP99XH"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── Helpers ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '') + ' show';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function showAuthMsg(msg, type = 'info') {
+  const el = document.getElementById('authMsg');
+  el.textContent = msg;
+  el.className = 'auth-msg ' + type + ' show';
+}
+function hideAuthMsg() {
+  document.getElementById('authMsg').className = 'auth-msg';
+}
+
+function setLoading(btnId, txtId, loading, defaultTxt) {
+  const btn = document.getElementById(btnId);
+  const txt = document.getElementById(txtId);
+  btn.disabled = loading;
+  txt.textContent = loading ? 'PLEASE WAIT...' : defaultTxt;
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  let d;
+  if (ts.seconds) d = new Date(ts.seconds * 1000);
+  else if (typeof ts === 'number') d = new Date(ts);
+  else d = new Date(ts);
+  return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' +
+         d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+}
+
+function fmtDateShort(ts) {
+  if (!ts) return '—';
+  let d;
+  if (ts.seconds) d = new Date(ts.seconds * 1000);
+  else if (typeof ts === 'number') d = new Date(ts);
+  else d = new Date(ts);
+  return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+// ── Tab switcher ──
+window.switchTab = function(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  hideAuthMsg();
+};
+
+// ── Profile tabs ──
+document.querySelectorAll('.ptab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab)?.classList.add('active');
+  });
+});
+
+// ── Signup ──
+window.handleSignup = async function(e) {
+  e.preventDefault();
+  hideAuthMsg();
+  const email = document.getElementById('signupEmail').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const pass = document.getElementById('signupPass').value;
+  const pass2 = document.getElementById('signupPass2').value;
+
+  // Validate
+  let ok = true;
+  if (!/^\d{10}$/.test(phone)) {
+    document.getElementById('signupPhoneErr').textContent = 'ENTER VALID 10-DIGIT NUMBER';
+    document.getElementById('signupPhoneErr').classList.add('show');
+    document.getElementById('signupPhone').classList.add('err');
+    ok = false;
+  } else {
+    document.getElementById('signupPhoneErr').classList.remove('show');
+    document.getElementById('signupPhone').classList.remove('err');
+  }
+  if (pass.length < 6) {
+    document.getElementById('signupPassErr').textContent = 'MINIMUM 6 CHARACTERS';
+    document.getElementById('signupPassErr').classList.add('show');
+    document.getElementById('signupPass').classList.add('err');
+    ok = false;
+  } else {
+    document.getElementById('signupPassErr').classList.remove('show');
+    document.getElementById('signupPass').classList.remove('err');
+  }
+  if (pass !== pass2) {
+    document.getElementById('signupPass2Err').textContent = 'PASSWORDS DO NOT MATCH';
+    document.getElementById('signupPass2Err').classList.add('show');
+    document.getElementById('signupPass2').classList.add('err');
+    ok = false;
+  } else {
+    document.getElementById('signupPass2Err').classList.remove('show');
+    document.getElementById('signupPass2').classList.remove('err');
+  }
+  if (!ok) return;
+
+  setLoading('signupBtn', 'signupBtnTxt', true);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    // Save user profile to Firestore
+    await setDoc(doc(db, 'users', cred.user.uid), {
+      email,
+      phone: '+91' + phone,
+      createdAt: Date.now(),
+      uid: cred.user.uid
+    });
+    showToast('✓ ACCOUNT CREATED! WELCOME.', 'success');
+  } catch (err) {
+    const msgs = {
+      'auth/email-already-in-use': 'EMAIL ALREADY REGISTERED. TRY LOGGING IN.',
+      'auth/invalid-email': 'INVALID EMAIL FORMAT.',
+      'auth/weak-password': 'PASSWORD TOO WEAK. MIN 6 CHARS.'
+    };
+    showAuthMsg(msgs[err.code] || err.message, 'error');
+  } finally {
+    setLoading('signupBtn', 'signupBtnTxt', false, 'CREATE ACCOUNT_');
+  }
+};
+
+// ── Login ──
+window.handleLogin = async function(e) {
+  e.preventDefault();
+  hideAuthMsg();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+
+  setLoading('loginBtn', 'loginBtnTxt', true);
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    showToast('✓ AUTHENTICATED.', 'success');
+  } catch (err) {
+    const msgs = {
+      'auth/user-not-found': 'NO ACCOUNT FOUND WITH THIS EMAIL.',
+      'auth/wrong-password': 'INCORRECT PASSWORD.',
+      'auth/invalid-credential': 'INVALID CREDENTIALS. CHECK AND RETRY.',
+      'auth/invalid-email': 'INVALID EMAIL FORMAT.',
+      'auth/too-many-requests': 'TOO MANY ATTEMPTS. TRY LATER.'
+    };
+    showAuthMsg(msgs[err.code] || err.message, 'error');
+  } finally {
+    setLoading('loginBtn', 'loginBtnTxt', false, 'LOGIN_');
+  }
+};
+
+// ── Forgot password ──
+window.showForgot = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) { showAuthMsg('ENTER YOUR EMAIL FIRST.', 'error'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showAuthMsg('RESET LINK SENT TO ' + email, 'success');
+  } catch (err) {
+    showAuthMsg('COULD NOT SEND RESET EMAIL.', 'error');
+  }
+};
+
+// ── Logout ──
+window.logout = async function() {
+  await signOut(auth);
+  showToast('LOGGED OUT.');
+};
+
+// ── Load user profile data ──
+async function loadUserProfile(user) {
+  // Get extra data (phone) from Firestore users collection
+  let phone = '—';
+  let since = '—';
+  try {
+    const uDoc = await getDoc(doc(db, 'users', user.uid));
+    if (uDoc.exists()) {
+      const d = uDoc.data();
+      phone = d.phone || '—';
+      since = d.createdAt ? fmtDateShort(d.createdAt) : '—';
+    }
+  } catch(e) {}
+
+  const namePart = (user.email || '').split('@')[0].toUpperCase();
+  document.getElementById('profileName').textContent = namePart;
+  document.getElementById('profileEmail').textContent = user.email || '—';
+  document.getElementById('profilePhone').textContent = phone;
+  document.getElementById('profileSince').textContent = since;
+  document.getElementById('avatarLetter').textContent = namePart.charAt(0);
+  document.getElementById('acEmail').textContent = user.email || '—';
+  document.getElementById('acPhone').textContent = phone;
+  document.getElementById('acUid').textContent = user.uid;
+}
+
+// ── Load orders ──
+async function loadOrders(user) {
+  const container = document.getElementById('ordersContainer');
+  container.innerHTML = '<div class="loading-row"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>';
+
+  try {
+    // Fetch orders where customer.email OR customer.phone matches
+    const userPhone = '+91' + (await getUserPhone(user));
+    const userEmail = user.email;
+
+    // Query by email
+    const qEmail = query(collection(db, 'orders'), where('customer.email', '==', userEmail));
+    const snapEmail = await getDocs(qEmail);
+
+    // Query by phone
+    let snapPhone = { docs: [] };
+    if (userPhone && userPhone !== '+91undefined') {
+      const qPhone = query(collection(db, 'orders'), where('customer.phone', '==', userPhone));
+      snapPhone = await getDocs(qPhone);
+    }
+
+    // Merge & deduplicate
+    const orderMap = new Map();
+    snapEmail.docs.forEach(d => orderMap.set(d.id, { id: d.id, ...d.data() }));
+    snapPhone.docs.forEach(d => { if (!orderMap.has(d.id)) orderMap.set(d.id, { id: d.id, ...d.data() }); });
+
+    const orders = Array.from(orderMap.values());
+    // Sort newest first
+    orders.sort((a, b) => {
+      const ta = a.createdAt?.seconds || a.createdAt || 0;
+      const tb = b.createdAt?.seconds || b.createdAt || 0;
+      return tb - ta;
+    });
+
+    // Update stats
+    document.getElementById('statOrders').textContent = orders.length;
+    document.getElementById('statDelivered').textContent = orders.filter(o => o.status === 'delivered').length;
+    document.getElementById('statPending').textContent = orders.filter(o => ['shipped', 'confirmed', 'paid'].includes(o.status)).length;
+
+    if (!orders.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">[ NO ORDERS ]</div>
+          <div class="empty-msg">YOUR ORDER HISTORY IS EMPTY.<br>TIME TO CHANGE THAT.</div>
+          <a href="index.html" class="empty-cta">← BROWSE SHOP</a>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = '';
+    const list = document.createElement('div');
+    list.className = 'orders-list';
+    orders.forEach(order => {
+      const card = buildOrderCard(order);
+      list.appendChild(card);
+    });
+    container.appendChild(list);
+
+    // Store orders globally for modal
+    window._orders = orders;
+
+  } catch (err) {
+    console.error('Orders load error:', err);
+    container.innerHTML = `<div class="empty-state"><div class="empty-msg">FAILED TO LOAD ORDERS.<br>${err.message}</div></div>`;
+  }
+}
+
+async function getUserPhone(user) {
+  try {
+    const uDoc = await getDoc(doc(db, 'users', user.uid));
+    if (uDoc.exists()) {
+      const p = uDoc.data().phone || '';
+      // Strip +91 prefix
+      return p.replace(/^\+91/, '');
+    }
+  } catch(e) {}
+  return '';
+}
+
+function getStatusClass(status) {
+  const map = { delivered: 'status-delivered', shipped: 'status-shipped', confirmed: 'status-confirmed', paid: 'status-confirmed', pending: 'status-pending', cancelled: 'status-cancelled' };
+  return map[status?.toLowerCase()] || 'status-pending';
+}
+
+function buildOrderCard(order) {
+  const card = document.createElement('div');
+  card.className = 'order-card';
+  const itemNames = (order.items || []).map(i => i.name).slice(0, 3);
+  const moreCount = (order.items || []).length - 3;
+  const chips = itemNames.map(n => `<span class="order-item-chip">${n}</span>`).join('') + (moreCount > 0 ? `<span class="order-item-chip">+${moreCount} MORE</span>` : '');
+  const statusLabel = (order.status || 'PENDING').toUpperCase();
+  const statusCls = getStatusClass(order.status);
+
+  card.innerHTML = `
+    <div class="order-card-header">
+      <span class="order-id">#${order.orderId || order.id.slice(0,10).toUpperCase()}</span>
+      <span class="order-name">${(order.items || [])[0]?.name || 'ORDER'}</span>
+      <span class="order-date">${fmtDateShort(order.createdAt)}</span>
+      <span class="order-status ${statusCls}">${statusLabel}</span>
+      <span class="order-price">₹${Number(order.pricing?.total || 0).toLocaleString('en-IN')}</span>
+      <span class="order-arrow">→</span>
+    </div>
+    ${chips ? `<div class="order-items-preview">${chips}</div>` : ''}
+  `;
+  card.addEventListener('click', () => openOrderModal(order.id || order.orderId));
+  return card;
+}
+
+// ── Order modal ──
+window.openOrderModal = function(orderId) {
+  const order = (window._orders || []).find(o => o.id === orderId || o.orderId === orderId);
+  if (!order) return;
+
+  document.getElementById('modalOrderId').textContent = 'ORDER #' + (order.orderId || order.id.slice(0,10).toUpperCase());
+
+  // Build timeline
+  const status = (order.status || 'pending').toLowerCase();
+  const statusFlow = ['confirmed', 'shipped', 'delivered'];
+
+  const steps = [
+    { key: 'confirmed', label: 'ORDER CONFIRMED', ts: order.createdAt },
+    { key: 'shipped', label: 'SHIPPED / DISPATCHED', ts: order.shippedAt || null },
+    { key: 'delivered', label: 'DELIVERED', ts: order.deliveredAt || null }
+  ];
+
+  const statusIdx = statusFlow.indexOf(status === 'paid' ? 'confirmed' : status);
+  let tlHtml = '<div class="timeline"><div class="timeline-title">// ORDER_TIMELINE</div><div class="timeline-items">';
+  steps.forEach((step, i) => {
+    let cls = 'pending';
+    if (i < statusIdx) cls = 'done';
+    else if (i === statusIdx) cls = 'active';
+    const timeStr = step.ts ? fmtDate(step.ts) : (cls === 'pending' ? 'AWAITING...' : '—');
+    tlHtml += `<div class="tl-item ${cls}">
+      <div class="tl-dot"></div>
+      ${i < steps.length - 1 ? '<div class="tl-line"></div>' : ''}
+      <div class="tl-content">
+        <div class="tl-step">${step.label}</div>
+        <div class="tl-time">${timeStr}</div>
+      </div>
+    </div>`;
+  });
+  tlHtml += '</div></div>';
+
+  // Items
+  let itemsHtml = '<div class="od-section"><div class="od-label">ITEMS ORDERED</div><div class="od-items">';
+  (order.items || []).forEach(item => {
+    const img = item.images?.[0];
+    itemsHtml += `<div class="od-item">
+      ${img ? `<img class="od-item-img" src="${img}" alt="${item.name}" loading="lazy">` : `<div class="od-item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px;">👕</div>`}
+      <div class="od-item-info">
+        <div class="od-item-name">${item.name}</div>
+        <div class="od-item-meta">${item.sizeName || item.size || '—'} ${item.colourName ? '· ' + item.colourName : ''} · QTY: ${item.qty}</div>
+      </div>
+      <div class="od-item-price">₹${Number(item.lineTotal || item.price * item.qty || 0).toLocaleString('en-IN')}</div>
+    </div>`;
+  });
+  itemsHtml += '</div></div>';
+
+  // Pricing
+  const p = order.pricing || {};
+  const pricingHtml = `<div class="od-section">
+    <div class="od-label">PRICING</div>
+    <div class="od-row"><span class="lbl">SUBTOTAL</span><span>₹${Number(p.subtotal||0).toLocaleString('en-IN')}</span></div>
+    <div class="od-row"><span class="lbl">SHIPPING</span><span style="color:var(--green)">${p.shipping === 0 ? 'FREE' : '₹' + p.shipping}</span></div>
+    ${p.discount > 0 ? `<div class="od-row"><span class="lbl">DISCOUNT</span><span style="color:var(--green)">-₹${Number(p.discount).toLocaleString('en-IN')}</span></div>` : ''}
+    <div class="od-row total"><span class="lbl">TOTAL</span><span class="val">₹${Number(p.total||0).toLocaleString('en-IN')}</span></div>
+  </div>`;
+
+  // Shipping address
+  const s = order.shipping || {};
+  const addrHtml = `<div class="od-section">
+    <div class="od-label">SHIPPING ADDRESS</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);line-height:1.8;letter-spacing:.04em;">
+      ${order.customer?.fullName || ''}<br>
+      ${s.address1 || ''}${s.address2 ? ', ' + s.address2 : ''}<br>
+      ${s.city || ''}, ${s.state || ''} — ${s.pincode || ''}<br>
+      ${s.country || 'India'}<br>
+      ${order.customer?.phone || ''}
+    </div>
+  </div>`;
+
+  // Payment method
+  const payHtml = `<div class="od-section">
+    <div class="od-label">PAYMENT</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <span style="font-family:var(--mono);font-size:10px;letter-spacing:.06em;">${(order.paymentMethod || '—').toUpperCase()}</span>
+      ${order.razorpay?.paymentId ? `<span style="font-family:var(--mono);font-size:8px;color:var(--text-muted);">${order.razorpay.paymentId}</span>` : ''}
+      <span class="order-status ${getStatusClass(order.paymentStatus || 'pending')}">${(order.paymentStatus || 'PENDING').toUpperCase()}</span>
+    </div>
+  </div>`;
+
+  document.getElementById('modalBody').innerHTML = tlHtml + itemsHtml + pricingHtml + addrHtml + payHtml;
+  document.getElementById('orderModal').classList.add('open');
+};
+
+window.closeOrderModal = function() {
+  document.getElementById('orderModal').classList.remove('open');
+};
+
+document.getElementById('orderModal').addEventListener('click', function(e) {
+  if (e.target === this) window.closeOrderModal();
+});
+
+// ── Auth state observer ──
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // Logged in
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('profileScreen').classList.add('active');
+    document.getElementById('navStatus').style.display = 'flex';
+    document.getElementById('navLogout').style.display = 'block';
+
+    await loadUserProfile(user);
+    await loadOrders(user);
+  } else {
+    // Logged out
+    document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('profileScreen').classList.remove('active');
+    document.getElementById('navStatus').style.display = 'none';
+    document.getElementById('navLogout').style.display = 'none';
+    window._orders = [];
+  }
+});
+
+// expose
+window.handleLogin = window.handleLogin;
+window.handleSignup = window.handleSignup;
+window.logout = logout;
+window.showForgot = window.showForgot;
+window.switchTab = window.switchTab;
+</script>
+</body>
+</html>

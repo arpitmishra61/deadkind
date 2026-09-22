@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dead'Kind — About</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card-bg: #0e0e0e;
+  --accent: #c45486;
+  --accent-dim: rgba(196,84,134,0.10);
+  --accent-glow: rgba(196,84,134,0.22);
+  --green: #39e75f;
+  --yellow: #e8e83a;
+  --text: #ffffff;
+  --text-dim: #888;
+  --text-muted: #444;
+  --border: #1c1c1c;
+  --border-mid: #2a2a2a;
+  --mono: 'Share Tech Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Rajdhani', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 13px; min-height: 100vh; overflow-x: hidden; }
+button, select { cursor: pointer; }
+select { -webkit-appearance: none; appearance: none; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+/* SCANLINE */
+.scanline { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); pointer-events: none; z-index: 9999; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 200;
+  background: #080808; border-bottom: 1px solid var(--border);
+  height: 52px; display: flex; align-items: center; padding: 0 16px;
+  justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 0; text-decoration: none; }
+.logo-skull {
+  width: 60px; height: 60px; object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(196,84,134,0.7)) drop-shadow(0 0 10px rgba(232,24,122,0.35));
+}
+.logo-name {
+  height: 40px; width: auto; margin-left: -0px; object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(232,24,122,0.5)) drop-shadow(0 0 10px rgba(232,24,122,0.25));
+}
+
+.nav-status-row { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 8px; color: var(--accent); letter-spacing: 0.08em; animation: statusBlink 2s infinite; }
+.status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse-pink 2s infinite; flex-shrink: 0; }
+@keyframes pulse-pink { 0%,100%{box-shadow:0 0 0 0 rgba(196,84,134,0.5);} 50%{box-shadow:0 0 0 5px rgba(196,84,134,0);} }
+@keyframes statusBlink { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px; background: none; border: 1px solid var(--border-mid);
+  padding: 8px; cursor: pointer; border-radius: 2px; flex-shrink: 0;
+}
+.hamburger span { display: block; width: 100%; height: 1px; background: var(--text); transition: all 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Desktop nav links */
+.nav-right-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+.nav-right-links a { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+.nav-right-links a:hover { color: var(--text); }
+.nav-right-links a.active { color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
+
+.nav-cart { font-family: var(--mono); font-size: 11px; color: var(--accent); background: none; border: none; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
+.nav-cart svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; }
+
+/* Mobile menu overlay */
+.mobile-menu {
+  display: none;
+  position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+  background: #060606; z-index: 150;
+  flex-direction: column; padding: 32px 24px; gap: 0;
+  border-top: 1px solid var(--border);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: var(--mono); font-size: 20px; color: var(--text-dim);
+  text-decoration: none; letter-spacing: 0.15em;
+  padding: 18px 0; border-bottom: 1px solid var(--border);
+  transition: color 0.2s; display: flex; justify-content: space-between; align-items: center;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a.active { color: var(--accent); }
+.mobile-menu a::after { content: '→'; font-size: 14px; color: var(--text-muted); }
+.mobile-menu a.active::after { color: var(--accent); }
+.mobile-menu-cart {
+  margin-top: auto; padding-top: 24px; border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 14px; color: var(--accent); letter-spacing: 0.1em;
+  display: flex; align-items: center; gap: 10px; background: none; border-left: none; border-right: none; border-bottom: none;
+}
+.mobile-menu-cart svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; }
+
+/* ── OUTER LAYOUT ── */
+.outer { display: flex; min-height: calc(100vh - 52px - 38px); }
+
+/* ── LEFT ICON SIDEBAR ── */
+.icon-sidebar {
+  width: 68px; min-width: 68px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 0; gap: 6px;
+  position: sticky; top: 52px; height: calc(100vh - 52px);
+}
+.icon-btn {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid transparent; background: none; color: var(--text-muted);
+  cursor: pointer; transition: all 0.18s; border-radius: 2px;
+}
+.icon-btn:hover, .icon-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.icon-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.scroll-label-wrap { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.scroll-label { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); font-family: var(--mono); font-size: 8px; color: var(--text-muted); letter-spacing: 0.12em; }
+.scroll-arrow { width: 1px; height: 24px; background: linear-gradient(to bottom, transparent, var(--text-muted)); }
+
+/* ── MAIN CONTENT ── */
+.main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* TOP SECTION — Desktop: 3 col grid */
+.top-section {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  min-height: 520px;
+}
+
+/* LEFT: About text */
+.about-left { padding: 40px 32px; }
+.about-title { font-family: var(--display); font-size: 52px; letter-spacing: 0.03em; line-height: 1; margin-bottom: 20px; }
+.about-tagline { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 28px; }
+.about-body { font-family: var(--mono); font-size: 11px; color: var(--text-dim); line-height: 2; letter-spacing: 0.04em; margin-bottom: 28px; }
+.about-body p { margin-bottom: 2px; }
+.about-cta { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.08em; line-height: 2; }
+
+/* CENTER: Skull + radar */
+.about-center {
+  width: 380px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  transform: translateY(-15%);
+}
+.radar-wrap { position: relative; width: 320px; height: 320px; }
+.radar-circle { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(196,84,134,0.18); }
+.radar-circle:nth-child(1) { width: 100%; height: 100%; top: 0; left: 0; }
+.radar-circle:nth-child(2) { width: 70%; height: 70%; top: 15%; left: 15%; }
+.radar-circle:nth-child(3) { width: 40%; height: 40%; top: 30%; left: 30%; }
+.radar-line-h { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(196,84,134,0.15); }
+.radar-line-v { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(196,84,134,0.15); }
+.radar-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.radar-dot-1 { top: 22%; left: 58%; animation: blinkDot 2.2s infinite 0.3s; }
+.radar-dot-2 { top: 65%; left: 30%; animation: blinkDot 2.2s infinite 0.9s; }
+.radar-dot-3 { top: 38%; left: 72%; animation: blinkDot 2.2s infinite 1.5s; }
+@keyframes blinkDot { 0%,100%{opacity:1;} 50%{opacity:0.1;} }
+.radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 330deg, rgba(196,84,134,0.12) 360deg); animation: sweep 4s linear infinite; }
+@keyframes sweep { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+.skull-img { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(196,84,134,0.5)) drop-shadow(0 0 40px rgba(196,84,134,0.2)); }
+.crosshair-h { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(196,84,134,0.3); }
+.crosshair-v { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(196,84,134,0.3); }
+.crosshair-corner { position: absolute; width: 14px; height: 14px; border-color: rgba(196,84,134,0.6); border-style: solid; }
+.cc-tl { top: 12%; left: 12%; border-width: 1px 0 0 1px; }
+.cc-tr { top: 12%; right: 12%; border-width: 1px 1px 0 0; }
+.cc-bl { bottom: 12%; left: 12%; border-width: 0 0 1px 1px; }
+.cc-br { bottom: 12%; right: 12%; border-width: 0 1px 1px 0; }
+
+/* RIGHT: Manifesto */
+.about-right {
+  padding: 28px 12px;
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 0;
+  width: 60%; max-width: 320px; margin-left: auto;
+}
+.manifesto-box { border: 1px solid var(--border-mid); padding: 24px; margin-bottom: 20px; background: rgba(196,84,134,0.03); flex: 1.15; min-height: 320px; }
+.manifesto-title { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 18px; }
+.manifesto-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.manifesto-item:last-child { margin-bottom: 0; }
+.manifesto-icon { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.manifesto-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.2; }
+.manifesto-item-title { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 2px; }
+.manifesto-item-sub { font-family: var(--body); font-size: 12px; color: var(--text-dim); }
+.sysinfo-box { border: 1px solid var(--border-mid); padding: 16px; background: rgba(196,84,134,0.02); min-height: 280px; }
+.sysinfo-title { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 14px; }
+.sysinfo-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.sysinfo-row:last-of-type { border-bottom: none; }
+.sysinfo-key { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.08em; }
+.sysinfo-val { font-family: var(--mono); font-size: 9px; color: var(--text); letter-spacing: 0.06em; }
+.join-freq-btn { margin-top: 14px; width: 100%; padding: 10px 16px; background: none; border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s; }
+.join-freq-btn:hover { background: var(--accent); color: var(--bg); }
+.join-freq-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+/* ── COLLECTIONS SECTION ── */
+.collections-section { border-top: 1px solid var(--border); padding: 18px 32px 28px; width: calc(100% - 320px); margin-top: -260px; }
+.collections-section-title { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 20px; }
+.collections-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.col-card { border: 1px solid var(--border-mid); background: var(--card-bg); padding: 0; position: relative; cursor: pointer; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+.col-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.col-card.active { border-color: var(--accent); }
+.col-card-num { position: absolute; top: 10px; left: 12px; font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.06em; z-index: 2; }
+.col-card-lock { position: absolute; top: 10px; right: 12px; z-index: 2; color: var(--text-muted); }
+.col-card-lock svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.col-active-dot { position: absolute; top: 10px; right: 12px; z-index: 2; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: blinkDot 1.5s infinite; }
+.col-card-img { width: 100%; aspect-ratio: 1/0.8; display: flex; align-items: center; justify-content: center; background: #111; overflow: hidden; }
+.col-card-img img { width: 100%; height: 115%; object-fit: contain; }
+.col-card-img-placeholder { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.col-card-img-placeholder svg { width: 70px; height: 70px; stroke: var(--text-muted); fill: none; stroke-width: 0.6; }
+.col-card.active .col-card-img { filter: drop-shadow(0 0 10px rgba(196,84,134,0.4)); }
+.col-card-body { padding: 12px 12px 14px; }
+.col-card-name { font-family: var(--display); font-size: 18px; letter-spacing: 0.04em; margin-bottom: 2px; }
+.col-card-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+.col-card.active .col-card-sub { color: var(--accent); }
+.col-card-status { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.06em; }
+.col-card-status.released { color: var(--text-dim); }
+.col-card-status.active-status { color: var(--accent); }
+.col-card-date { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.06em; margin-top: 1px; }
+
+/* ── FOOTER ── */
+.footer { height: 38px; border-top: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #080808; position: relative; }
+.footer-left { font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.06em; display: flex; align-items: center; gap: 14px; }
+.footer-center { position: absolute; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; animation: tagBlink 3s ease-in-out infinite; white-space: nowrap; }
+@keyframes tagBlink { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+.footer-right { margin-left: auto; display: flex; align-items: center; gap: 20px; font-family: var(--mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.06em; }
+
+.nav-barcode { display: flex; gap: 1.5px; align-items: center; height: 22px; opacity: 0.5; }
+.nav-barcode span { display: block; height: 100%; background: var(--text); }
+
+.skull-svg-placeholder { width: 200px; height: 200px; }
+.skull-svg-placeholder svg { width: 100%; height: 100%; stroke: var(--accent); fill: none; stroke-width: 0.8; filter: drop-shadow(0 0 12px rgba(196,84,134,0.4)); }
+
+/* ════════════════════════════════════════════
+   MOBILE RESPONSIVE — max-width: 768px
+════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* NAV */
+  .hamburger { display: flex; }
+  .nav-right-links { display: none; }
+  .nav-status-row { font-size: 7px; }
+
+  /* Hide sidebar on mobile */
+  .icon-sidebar { display: none; }
+
+  /* OUTER */
+  .outer { flex-direction: column; }
+
+  /* TOP SECTION → single column stack */
+  .top-section {
+    display: flex;
+    flex-direction: column;
+    min-height: unset;
+    border-bottom: none;
+  }
+
+  /* ABOUT LEFT */
+  .about-left {
+    padding: 28px 20px 24px;
+    border-bottom: 1px solid var(--border);
+    order: 1;
+  }
+  .about-title { font-size: 40px; margin-bottom: 14px; }
+  .about-tagline { font-size: 10px; margin-bottom: 18px; }
+  .about-body { font-size: 10px; margin-bottom: 18px; }
+  .about-cta { font-size: 10px; }
+
+  /* SKULL CENTER */
+  .about-center {
+    width: 100%;
+    order: 2;
+    transform: none;
+    height: 280px;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+  }
+  .radar-wrap { width: 240px; height: 240px; }
+  .skull-img { width: 320px; height: 320px; }
+
+  /* RIGHT: Manifesto + SysInfo → stacked full-width */
+  .about-right {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 20px 20px;
+    order: 3;
+  }
+  .manifesto-box {
+    min-height: unset;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .sysinfo-box { min-height: unset; }
+
+  /* COLLECTIONS */
+  .collections-section {
+    width: 100%;
+    margin-top: 0;
+    padding: 20px 16px 28px;
+    border-top: 1px solid var(--border);
+    order: 4;
+  }
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .col-card-name { font-size: 15px; }
+
+  /* FOOTER */
+  .footer {
+    height: auto;
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .footer-center {
+    position: static;
+    transform: none;
+    font-size: 9px;
+  }
+  .footer-right { margin-left: 0; gap: 10px; flex-wrap: wrap; }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+  .about-title { font-size: 32px; }
+  .radar-wrap { width: 200px; height: 200px; }
+  .skull-img { width: 260px; height: 260px; }
+  .about-center { height: 240px; }
+  .collections-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .col-card-name { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <!-- Left: skull + system info -->
+  <div style="display:flex;align-items:center;gap:0;flex:1;min-width:0;">
+    <a href="index.html" class="nav-logo">
+      <img src="skull3.png" class="logo-skull" alt="Skull" onerror="this.style.display='none'">
+      <img src="name.png" class="logo-name" alt="DeadKind" onerror="this.style.display='none'">
+    </a>
+    <div style="margin-left:8px;display:flex;flex-direction:column;">
+      <div class="nav-status-row">
+        <span class="status-dot"></span>SYSTEM ONLINE
+        <span style="color:var(--text-muted);margin:0 5px;">•</span>
+        <span style="color:var(--text-muted);">DK-2050</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop links -->
+  <ul class="nav-right-links">
+    <li><a href="index.html">SHOP</a></li>
+    <li><a href="collection_page.html">COLLECTIONS</a></li>
+    <li><a href="Archive.html">ARCHIVE</a></li>
+    <li><a href="#" class="active">ABOUT</a></li>
+    <li><a href="contect.html">CONTACT</a></li>
+    <li>
+      <button class="nav-cart">
+        CART [ 0 ]
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Hamburger (mobile only) -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">SHOP</a>
+  <a href="collection_page.html">COLLECTIONS</a>
+  <a href="Archive.html">ARCHIVE</a>
+  <a href="#" class="active">ABOUT</a>
+  <a href="contect.html">CONTACT</a>
+  <button class="mobile-menu-cart">
+    <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    CART [ 0 ]
+  </button>
+</div>
+
+<!-- ── OUTER LAYOUT ── -->
+<div class="outer">
+
+  <!-- Left icon sidebar (hidden on mobile) -->
+  <aside class="icon-sidebar">
+    <button class="icon-btn active" title="Target">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+    </button>
+    <button class="icon-btn" title="Close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <button class="icon-btn" title="Square">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/></svg>
+    </button>
+    <button class="icon-btn" title="Copy">
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </button>
+    <button class="icon-btn" title="Signal">
+      <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="icon-btn" title="Skull">
+      <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 3.5-2 6.5-5 8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2c-3-1.5-5-4.5-5-8a9 9 0 0 1 9-9z"/><line x1="9" y1="17" x2="9" y2="21"/><line x1="15" y1="17" x2="15" y2="21"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="icon-btn" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="scroll-label-wrap">
+      <div class="scroll-label">SCROLL TO EXPLORE</div>
+      <div class="scroll-arrow"></div>
+      <button class="icon-btn" title="Alert" style="margin-top:4px;">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <div class="top-section">
+
+      <!-- LEFT: About copy -->
+      <div class="about-left">
+        <div class="about-title">ABOUT<span style="color:var(--accent);">_</span></div>
+        <div class="about-tagline">FOR THOSE WHO DON'T FIT</div>
+        <div class="about-body">
+          <p>DeadKind is not just a brand.</p>
+          <p>It's a signal.</p>
+          <p>A frequency for the misfits, the outcasts,</p>
+          <p>the ones who see through the noise.</p>
+          <p>We don't follow culture.</p>
+          <p>We build our own.</p>
+        </div>
+        <div class="about-cta">
+          <p>WE ARE DEADKIND.</p>
+          <p>AND THIS IS OUR TRANSMISSION.</p>
+        </div>
+      </div>
+
+      <!-- CENTER: Skull + radar -->
+      <div class="about-center">
+        <div class="radar-wrap">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-line-h"></div>
+          <div class="radar-line-v"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-dot radar-dot-1"></div>
+          <div class="radar-dot radar-dot-2"></div>
+          <div class="radar-dot radar-dot-3"></div>
+          <div class="crosshair-h"></div>
+          <div class="crosshair-v"></div>
+          <div class="crosshair-corner cc-tl"></div>
+          <div class="crosshair-corner cc-tr"></div>
+          <div class="crosshair-corner cc-bl"></div>
+          <div class="crosshair-corner cc-br"></div>
+          <img src="skull2.png" class="skull-img" alt="Skull"
+            onerror="this.style.display='none';document.getElementById('skullSvgFallback').style.display='flex';">
+          <div id="skullSvgFallback" class="skull-svg-placeholder" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;">
+            <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="44" rx="34" ry="36"/>
+              <ellipse cx="37" cy="44" rx="9" ry="10"/>
+              <ellipse cx="63" cy="44" rx="9" ry="10"/>
+              <rect x="38" y="78" width="8" height="14" rx="1"/>
+              <rect x="54" y="78" width="8" height="14" rx="1"/>
+              <path d="M32 78 Q50 72 68 78"/>
+              <path d="M44 78 L44 92"/>
+              <path d="M56 78 L56 92"/>
+              <path d="M30 58 Q50 65 70 58"/>
+              <line x1="50" y1="8" x2="50" y2="2"/>
+              <line x1="26" y1="16" x2="22" y2="11"/>
+              <line x1="74" y1="16" x2="78" y2="11"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Manifesto + System Info -->
+      <div class="about-right">
+        <div class="manifesto-box">
+          <div class="manifesto-title">OUR MANIFESTO_</div>
+          <div class="manifesto-item">
+            <div class="manifesto-icon"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 3.5-2 6.5-5 8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2c-3-1.5-5-4.5-5-8a9 9 0 0 1 9-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+            <div class="manifesto-item-content">
+              <div class="manifesto-item-title">QUESTION EVERYTHING.</div>
+              <div class="manifesto-item-sub">Truth is a construct.</div>
+            </div>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="manifesto-item-content">
+              <div class="manifesto-item-title">SEE BEYOND THE NOISE.</div>
+              <div class="manifesto-item-sub">Clarity is rebellion.</div>
+            </div>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="manifesto-item-content">
+              <div class="manifesto-item-title">BUILT FOR OUTSIDERS.</div>
+              <div class="manifesto-item-sub">Not for everyone.</div>
+            </div>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg></div>
+            <div class="manifesto-item-content">
+              <div class="manifesto-item-title">CREATE. DESTROY. REBUILD.</div>
+              <div class="manifesto-item-sub">That's the only cycle that matters.</div>
+            </div>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></div>
+            <div class="manifesto-item-content">
+              <div class="manifesto-item-title">STAY OFF FREQUENCY.</div>
+              <div class="manifesto-item-sub">Stay DeadKind.</div>
+            </div>
+          </div>
+        </div>
+        <div class="sysinfo-box">
+          <div class="sysinfo-title">SYSTEM INFO_</div>
+          <div class="sysinfo-row"><span class="sysinfo-key">FOUNDED</span><span class="sysinfo-val">DK-2050</span></div>
+          <div class="sysinfo-row"><span class="sysinfo-key">ORIGIN</span><span class="sysinfo-val">EARTH (TEMP)</span></div>
+          <div class="sysinfo-row"><span class="sysinfo-key">STATUS</span><span class="sysinfo-val">OUTSIDER</span></div>
+          <div class="sysinfo-row"><span class="sysinfo-key">AFFILIATION</span><span class="sysinfo-val">NONE</span></div>
+          <div class="sysinfo-row"><span class="sysinfo-key">MOTIVE</span><span class="sysinfo-val">EXPRESSION</span></div>
+          <div class="sysinfo-row"><span class="sysinfo-key">MISSION</span><span class="sysinfo-val">LEAVE A SIGNAL</span></div>
+          <a href="contect.html"><button class="join-freq-btn">
+            JOIN THE FREQUENCY.
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLECTIONS SECTION -->
+    <div class="collections-section">
+      <div class="collections-section-title">OUR COLLECTIONS_</div>
+      <div class="collections-grid">
+        <div class="col-card">
+          <div class="col-card-num">01</div>
+          <div class="col-card-img">
+            <img src="planet.png" alt="Beyond the System" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="col-card-img-placeholder" style="display:none;"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40"/><ellipse cx="50" cy="50" rx="48" ry="12" fill="none" stroke="currentColor"/></svg></div>
+          </div>
+          <div class="col-card-body">
+            <div class="col-card-name">BEYOND THE SYSTEM</div>
+            <div class="col-card-sub">A world beyond conformity</div>
+            <div class="col-card-status released">RELEASED</div>
+            <div class="col-card-date">02.11.24</div>
+          </div>
+        </div>
+        <div class="col-card active">
+          <div class="col-card-num">02</div>
+          <div class="col-active-dot"></div>
+          <div class="col-card-img pink-tint">
+            <img src="skull2.png" alt="What I Want to Say" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="filter:drop-shadow(0 0 12px rgba(196,84,134,0.6)) sepia(0.4) saturate(2) hue-rotate(290deg);">
+            <div class="col-card-img-placeholder" style="display:none;"><svg viewBox="0 0 100 100"><circle cx="38" cy="44" r="26" fill="none" stroke="#c45486"/><circle cx="62" cy="44" r="26" fill="none" stroke="#c45486"/><circle cx="38" cy="38" r="8" fill="#c45486" opacity="0.8"/><circle cx="62" cy="38" r="8" fill="#c45486" opacity="0.8"/></svg></div>
+          </div>
+          <div class="col-card-body">
+            <div class="col-card-name">WHAT I WANT TO SAY</div>
+            <div class="col-card-sub">The thoughts we don't usually say out loud</div>
+            <div class="col-card-status active-status">ACTIVE</div>
+            <div class="col-card-date" style="color:var(--accent);">05.24.25</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">
+    <span>DK-2050</span>
+    <span style="color:var(--border-mid);">+</span>
+    <div class="nav-barcode" id="footerBarcode" style="height:16px;opacity:0.4;"></div>
+    <span>UNKNOWN SIGNAL</span>
+  </div>
+  <div class="footer-center">DEAD INSIDE. ALIVE ANYWAY.</div>
+  <div class="footer-right">
+    <span>© DEADKIND 2050</span>
+    <span>ALL RIGHTS REBELLED.</span>
+  </div>
+</footer>
+
+<script>
+// Barcode builder
+function buildBarcode(el) {
+  if (!el) return;
+  [2,1,3,1,2,4,1,2,1,3,2,1,2,3,1,4,1,2,3,1,2].forEach(w => {
+    const s = document.createElement('span');
+    s.style.cssText = `display:inline-block;width:${w}px;height:100%;background:var(--text);`;
+    el.appendChild(s);
+  });
+}
+buildBarcode(document.getElementById('footerBarcode'));
+
+// Hamburger toggle
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+
+// Close menu on link click
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+</script>
+</body>
+</html>
