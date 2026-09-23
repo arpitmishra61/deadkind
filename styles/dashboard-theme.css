@@ -1,0 +1,99 @@
+.dashboard-theme {
+  --accent: #ff3fa4;
+  --accent-rgb: 255, 63, 164;
+  --glow1: rgba(255, 63, 164, 0.55);
+  --glow2: rgba(180, 20, 100, 0.35);
+  --glow3: rgba(120, 10, 60, 0.18);
+  --floor-glow-color: rgba(200, 50, 120, 0.5);
+  --floor-glow-color2: rgba(150, 30, 80, 0.25);
+  --tab-active-border: #ff3fa4;
+  --btn-color: #c8ff00;
+  --collection-label-color: #c8ff00;
+  --black: #070709;
+  --dark: #0d0d0d;
+  --border: #1e1e1e;
+  --border2: #2a2a2a;
+  --void-black: #0a0a0a;
+  --bone-white: #f2f2f2;
+  --ash-grey: #4a4a4a;
+  --blood-red: #ff0000;
+  --acid-yellow: #dfff00;
+  --yellow: #dfff00;
+  --white: #f2f2f2;
+  --gray: #666;
+  --gray2: #444;
+  /* --font-heading, --font-mono, --font-script come straight from next/font
+     variable classes applied alongside this one (see app/(dashboard)/layout.js).
+     --font-body needs an alias since the shop skin also defines that name
+     (for a different font) and the two never render at the same time. */
+  --font-body: var(--font-dashboard-body);
+
+  background: #08020a;
+  color: var(--bone-white);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+@media (min-width: 769px) {
+  .dashboard-theme {
+    overflow-y: hidden;
+  }
+}
+.dashboard-theme::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.dashboard-theme.theme-rebel {
+  --accent: #c45486;
+  --accent-rgb: 255, 107, 53;
+  --glow1: rgba(255, 107, 53, 0.55);
+  --glow2: rgba(180, 60, 20, 0.35);
+  --glow3: rgba(120, 30, 10, 0.18);
+  --floor-glow-color: rgba(220, 80, 30, 0.5);
+  --floor-glow-color2: rgba(160, 50, 10, 0.25);
+  --tab-active-border: #c45486;
+  --btn-color: #c45486;
+  --collection-label-color: #c45486;
+}
+.dashboard-theme.theme-lineup {
+  --accent: #ff3fa4;
+  --accent-rgb: 255, 63, 164;
+  --glow1: rgba(255, 63, 164, 0.55);
+  --glow2: rgba(180, 20, 100, 0.35);
+  --glow3: rgba(120, 10, 60, 0.18);
+  --floor-glow-color: rgba(200, 50, 120, 0.5);
+  --floor-glow-color2: rgba(150, 30, 80, 0.25);
+  --tab-active-border: #ff3fa4;
+  --btn-color: #dfff00;
+  --collection-label-color: #dfff00;
+}
+.dashboard-theme.theme-chaos {
+  --accent: #00cfff;
+  --accent-rgb: 0, 207, 255;
+  --glow1: rgba(0, 207, 255, 0.55);
+  --glow2: rgba(0, 120, 200, 0.35);
+  --glow3: rgba(0, 60, 120, 0.18);
+  --floor-glow-color: rgba(0, 160, 220, 0.5);
+  --floor-glow-color2: rgba(0, 100, 160, 0.25);
+  --tab-active-border: #00cfff;
+  --btn-color: #00cfff;
+  --collection-label-color: #00cfff;
+}
+.dashboard-theme.theme-internet {
+  --accent: #9b59ff;
+  --accent-rgb: 155, 89, 255;
+  --glow1: rgba(155, 89, 255, 0.55);
+  --glow2: rgba(90, 40, 200, 0.35);
+  --glow3: rgba(50, 20, 120, 0.18);
+  --floor-glow-color: rgba(130, 60, 240, 0.5);
+  --floor-glow-color2: rgba(80, 30, 160, 0.25);
+  --tab-active-border: #9b59ff;
+  --btn-color: #9b59ff;
+  --collection-label-color: #9b59ff;
+}

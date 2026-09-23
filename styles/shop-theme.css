@@ -1,0 +1,46 @@
+/* Shared "shop" skin — used by the (shop) and (static) route groups. */
+.shop-theme {
+  --bg: #0a0a0a;
+  --card-bg: #0e0e0e;
+  --surface: #111;
+  --surface2: #161616;
+  --red: #e74c4c;
+  --accent: #c45486;
+  --accent-dim: rgba(196, 84, 134, 0.1);
+  --accent-glow: rgba(196, 84, 134, 0.22);
+  --green: #39e75f;
+  --yellow: #e8e83a;
+  --text: #ffffff;
+  --text-dim: #888;
+  --text-muted: #444;
+  --border: #1c1c1c;
+  --border-mid: #2a2a2a;
+  --mono: var(--font-mono), monospace;
+  --display: var(--font-display), sans-serif;
+  --body: var(--font-body), sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+.shop-theme button,
+.shop-theme select {
+  cursor: pointer;
+}
+.shop-theme select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.shop-theme ::-webkit-scrollbar {
+  width: 4px;
+}
+.shop-theme ::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+.shop-theme ::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
