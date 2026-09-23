@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["firebase-admin"],
   images: {
     remotePatterns: [
       // Firebase Storage — download-URL form (https://firebasestorage.googleapis.com/v0/b/<bucket>/o/<path>?...)
