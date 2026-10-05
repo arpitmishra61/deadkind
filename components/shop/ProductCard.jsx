@@ -22,12 +22,9 @@ const HeartIcon = () => (
 );
 
 function getDisplayImage(product) {
-  if (product.colourImages && Object.keys(product.colourImages).length) {
-    const firstColour = Object.keys(product.colourImages)[0];
-    if (product.colourImages[firstColour]?.length) return product.colourImages[firstColour][0];
-  }
   if (product.images?.length) return product.images[0];
-  return null;
+  const firstGroup = Object.values(product.colourImages || {}).find((urls) => urls?.length);
+  return firstGroup ? firstGroup[0] : null;
 }
 
 export default function ProductCard({ product, collectionName, coloursMap = {}, wished = false, onToggleWish }) {

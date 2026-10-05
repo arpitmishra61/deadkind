@@ -34,8 +34,8 @@ function getActiveImages(product, colours, selectedColour) {
   const colourName = colours[selectedColour]?.name;
   if (colourName && product.colourImages?.[colourName]?.length) return product.colourImages[colourName];
   if (product.images?.length) return product.images;
-  const firstGroup = Object.values(product.colourImages || {})[0];
-  return firstGroup?.length ? firstGroup : [];
+  const firstGroup = Object.values(product.colourImages || {}).find((urls) => urls?.length);
+  return firstGroup || [];
 }
 
 export default function ProductInteractive({ product, colours, sizes, breadcrumbCategory, related }) {
@@ -486,7 +486,7 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
           <div className={styles["related-grid"]}>
             {related.map((p) => {
               const hexes = (p.colours || []).map((cid) => colours[cid]?.hex || "#888");
-              const imgUrl = p.images?.[0] || Object.values(p.colourImages || {})[0]?.[0];
+              const imgUrl = p.images?.[0] || Object.values(p.colourImages || {}).find((urls) => urls?.length)?.[0];
               return (
                 <Link key={p.id} href={`/product/${p.id}`} className={styles["mini-card"]}>
                   <span className={`${styles["mc-corner"]} ${styles.tl}`} />
