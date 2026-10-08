@@ -21,7 +21,7 @@ const COLLECTIONS = [
     name: "BEYOND THE SYSTEM",
     desc: "A world beyond conformity. Imagining a place beyond trends, expectations, and society's rules.",
     signalId: "BTS-001",
-    release: "02.11.24",
+    release: "05.24.25",
     coverSrc: "/p1.png",
     coverFallback: "/planet.png",
   },

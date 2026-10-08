@@ -6,13 +6,6 @@ export const metadata = {
   title: "Dead'Kind — Contact",
 };
 
-const SKULL_FALLBACK = (
-  <svg viewBox="0 0 100 110" style={{ width: "70%", height: "70%", position: "relative", zIndex: 2 }}>
-    <ellipse cx="50" cy="44" rx="34" ry="36" fill="none" stroke="#c45486" />
-    <ellipse cx="37" cy="44" rx="9" ry="10" fill="none" stroke="#c45486" />
-    <ellipse cx="63" cy="44" rx="9" ry="10" fill="none" stroke="#c45486" />
-  </svg>
-);
 
 export default function ContactPage() {
   return (
@@ -41,7 +34,7 @@ export default function ContactPage() {
           <div className={styles["skull-art-wrap"]}>
             <div className={styles["skull-art-grid"]}>
               <div className={styles["skull-grid-lines"]} />
-              <ImgWithFallback src="/skull.png" alt="Skull" className={styles["skull-art-img"]} fallback={SKULL_FALLBACK} />
+              <ImgWithFallback src="/skull3.png" alt="Dead'Kind" className={styles["skull-art-img"]} />
               <div className={`${styles["skull-corner"]} ${styles.tl}`} />
               <div className={`${styles["skull-corner"]} ${styles.tr}`} />
               <div className={`${styles["skull-corner"]} ${styles.bl}`} />

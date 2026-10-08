@@ -152,13 +152,6 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
               <span className={styles.accent}>{theme.t2}</span>
             </div>
           </div>
-          <div className={styles["mob-signal-badge"]}>
-            <div className={styles["mob-signal-dot"]}>
-              <span className={styles["status-dot"]} />
-              LIVE
-            </div>
-            <div className={styles["mob-signal-num"]}>{String(piecesCount).padStart(2, "0")} PIECES</div>
-          </div>
           <div className={styles["mob-banner-bar"]}>
             <div className={styles["mob-pieces-info"]}>
               RELEASE: <span>05.24.25</span> &nbsp;&middot;&nbsp; STATUS: <span>FOR THOSE WHO DONT FIT</span>

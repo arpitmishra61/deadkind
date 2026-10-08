@@ -110,7 +110,7 @@
   transition: transform 0.5s ease, opacity 0.3s ease;
   cursor: zoom-in;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 .gallery-main img.zoomed {
   transform: scale(1.6);
@@ -149,7 +149,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 4;
+  z-index: 10;
   width: 32px;
   height: 32px;
   background: rgba(10, 10, 10, 0.8);
@@ -162,6 +162,7 @@
   transition: all 0.2s;
   padding: 0;
   cursor: pointer;
+  pointer-events: all;
 }
 .gallery-nav-btn:hover {
   border-color: var(--accent);
@@ -454,9 +455,9 @@
   font-size: 11px;
   letter-spacing: 0.06em;
   padding: 8px 14px;
-  border: 1px solid var(--border-mid);
+  border: 1px solid #ffffff;
   background: none;
-  color: var(--text-dim);
+  color: #ffffff;
   transition: all 0.15s;
   position: relative;
 }
@@ -471,18 +472,21 @@
   background: var(--accent-dim);
 }
 .size-option.out-of-stock {
-  opacity: 0.35;
   cursor: not-allowed;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
 }
 .size-option.out-of-stock::after {
   content: "";
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
+  left: -10%;
+  width: 120%;
   height: 1px;
-  background: var(--text-muted);
-  transform: rotate(-18deg);
+  background: #6b6b6b;
+  transform: translateY(-50%) rotate(-18deg);
+  pointer-events: none;
 }
 .size-guide-link {
   font-family: var(--mono);

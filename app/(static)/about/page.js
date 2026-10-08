@@ -198,7 +198,7 @@ export default function AboutPage() {
               <div className={styles["col-card-name"]}>BEYOND THE SYSTEM</div>
               <div className={styles["col-card-sub"]}>A world beyond conformity</div>
               <div className={`${styles["col-card-status"]} ${styles.released}`}>RELEASED</div>
-              <div className={styles["col-card-date"]}>02.11.24</div>
+              <div className={styles["col-card-date"]}>05.24.25</div>
             </div>
           </Link>
 

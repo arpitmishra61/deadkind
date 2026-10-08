@@ -36,6 +36,7 @@ export default async function CollectionPage({ searchParams }) {
 
   return (
     <CollectionBrowser
+      key={subParam || "all"}
       initialProducts={products}
       categories={categories}
       initialSubcategories={initialSubcategories}

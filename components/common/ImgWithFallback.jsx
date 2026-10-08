@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Replaces every onerror="this.style.display='none'" / onerror="this.src='...'"
 // pattern from the original site with one small component:
@@ -11,6 +11,12 @@ export default function ImgWithFallback({ src, swapSrc, fallback = null, alt = "
   const [currentSrc, setCurrentSrc] = useState(src);
   const [failed, setFailed] = useState(false);
   const [triedSwap, setTriedSwap] = useState(false);
+
+  useEffect(() => {
+    setCurrentSrc(src);
+    setFailed(false);
+    setTriedSwap(false);
+  }, [src]);
 
   if (failed) return fallback;
 
