@@ -391,7 +391,7 @@
 .main {
   margin-top: 72px;
   display: grid;
-  grid-template-columns: 54px 220px 1fr 220px;
+  grid-template-columns: 220px 1fr 220px;
   height: calc(100vh - 72px - 20px);
   overflow: hidden;
   position: relative;
@@ -425,7 +425,7 @@
 }
 
 .left-panel {
-  padding: 14px 12px;
+  padding: 14px 12px 14px 20px;
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;

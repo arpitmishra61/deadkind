@@ -337,9 +337,8 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
                       key={sid}
                       type="button"
                       disabled={stockQty === 0}
-                      className={`${styles["size-option"]} ${stockQty === 0 ? styles["out-of-stock"] : ""} ${
-                        selectedSize === sid ? styles.active : ""
-                      }`}
+                      className={`${styles["size-option"]} ${stockQty === 0 ? styles["out-of-stock"] : ""} ${selectedSize === sid ? styles.active : ""
+                        }`}
                       onClick={() => selectSize(sid, stockQty)}
                     >
                       {sizes[sid] || sid}
@@ -460,18 +459,18 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
               <ul>
                 <li>STANDARD DELIVERY: 5-7 WORKING DAYS</li>
                 <li>EXPRESS DELIVERY: 2-4 WORKING DAYS</li>
-                <li>FREE SHIPPING ON ORDERS ABOVE ₹999</li>
+                <li>FREE SHIPPING ON ORDERS ABOVE ₹1999</li>
                 <li>RETURNS ACCEPTED WITHIN 14 DAYS OF DELIVERY</li>
                 <li>ITEMS MUST BE UNWORN &amp; IN ORIGINAL PACKAGING</li>
               </ul>
             </AccordionItem>
             <AccordionItem label="CARE INSTRUCTIONS" open={openAcc.care} onToggle={() => toggleAccordion("care")}>
               <ul>
-                <li>MACHINE WASH COLD, GENTLE CYCLE</li>
-                <li>DO NOT BLEACH</li>
-                <li>TUMBLE DRY LOW HEAT</li>
+                <li>WASH INSIDE OUT</li>
+                <li>MACHINE WASH COLD AT 30°C</li>
+                <li>AIR DRY FLAT</li>
                 <li>DO NOT IRON ON PRINT DIRECTLY</li>
-                <li>DO NOT DRY CLEAN</li>
+                <li>DO NOT BLEACH</li>
               </ul>
             </AccordionItem>
           </div>

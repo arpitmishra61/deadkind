@@ -7,6 +7,7 @@
   background: #080808;
   position: relative;
 }
+
 .footer-left {
   font-family: var(--mono);
   font-size: 9px;
@@ -16,26 +17,31 @@
   align-items: center;
   gap: 14px;
 }
+
 .footer-center {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--mono);
   font-size: 10px;
-  color: var(--accent);
+  color: white;
   letter-spacing: 0.12em;
   animation: tagBlink 3s ease-in-out infinite;
   white-space: nowrap;
 }
+
 @keyframes tagBlink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
 }
+
 .footer-right {
   margin-left: auto;
   display: flex;
@@ -46,6 +52,7 @@
   color: var(--text-muted);
   letter-spacing: 0.06em;
 }
+
 .barcode {
   height: 16px;
   opacity: 0.4;
@@ -59,11 +66,13 @@
     gap: 6px;
     align-items: flex-start;
   }
+
   .footer-center {
     position: static;
     transform: none;
     font-size: 9px;
   }
+
   .footer-right {
     margin-left: 0;
     gap: 10px;

@@ -107,7 +107,7 @@ export default function CollectionBrowser({
   const [view, setView] = useState("grid");
   const [wishlist, setWishlist] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const perPage = 48;
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [openBlocks, setOpenBlocks] = useState({ collection: true, size: false, color: false, price: false });
 
@@ -459,61 +459,45 @@ export default function CollectionBrowser({
         </div>
 
         <footer className={styles.footer}>
-        <div className={styles["footer-coords"]}>DEAD&apos;KIND — DK-2050</div>
-        {totalPages > 1 && (
-          <div className={styles.pagination}>
-            <button
-              type="button"
-              className={`${styles["page-btn"]} ${styles.arrow}`}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            >
-              ‹
-            </button>
-            {pageList.map((p, i) =>
-              p === "…" ? (
-                <button key={`e-${i}`} type="button" className={`${styles["page-btn"]} ${styles.arrow}`} disabled>
-                  …
-                </button>
-              ) : (
-                <button
-                  key={p}
-                  type="button"
-                  className={`${styles["page-btn"]} ${p === safePage ? styles.active : ""}`}
-                  onClick={() => setCurrentPage(p)}
-                >
-                  {String(p).padStart(2, "0")}
-                </button>
-              )
-            )}
-            <button
-              type="button"
-              className={`${styles["page-btn"]} ${styles.arrow}`}
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            >
-              ›
-            </button>
+          <div className={styles["footer-coords"]}>DEAD&apos;KIND — DK-2050</div>
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              <button
+                type="button"
+                className={`${styles["page-btn"]} ${styles.arrow}`}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              >
+                ‹
+              </button>
+              {pageList.map((p, i) =>
+                p === "…" ? (
+                  <button key={`e-${i}`} type="button" className={`${styles["page-btn"]} ${styles.arrow}`} disabled>
+                    …
+                  </button>
+                ) : (
+                  <button
+                    key={p}
+                    type="button"
+                    className={`${styles["page-btn"]} ${p === safePage ? styles.active : ""}`}
+                    onClick={() => setCurrentPage(p)}
+                  >
+                    {String(p).padStart(2, "0")}
+                  </button>
+                )
+              )}
+              <button
+                type="button"
+                className={`${styles["page-btn"]} ${styles.arrow}`}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              >
+                ›
+              </button>
+            </div>
+          )}
+          <div className={styles["footer-right"]}>
+            <div className={styles["footer-tagline"]}>DEAD INSIDE. ALIVE ANYWAY.</div>
           </div>
-        )}
-        <div className={styles["footer-right"]}>
-          <div className={styles["show-per-page"]}>
-            SHOW:
-            <select
-              className={styles["show-select"]}
-              value={perPage}
-              onChange={(e) => {
-                setPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-            >
-              <option value={12}>12</option>
-              <option value={24}>24</option>
-              <option value={48}>48</option>
-            </select>
-          </div>
-          <div className={styles["footer-tagline"]}>DEAD INSIDE. ALIVE ANYWAY.</div>
-          <ImgWithFallback src="/skull.png" alt="DeadKind Skull" className={styles["footer-skull"]} />
-        </div>
-      </footer>
+        </footer>
       </main>
     </div>
   );

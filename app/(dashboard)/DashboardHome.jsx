@@ -17,6 +17,7 @@ const THEMES = {
     subcategoryName: "BEYOND THE SYSTEM",
     planet: "/p1.png",
     planetClass: "planet-rebel",
+    des: "A world beyond conformity <br/>This imagines a place beyond trends beyond expectations and beyond the rules written by society Designs in it: civilised chaos, Rebel on Mars, heavy on smoke "
   },
   lineup: {
     theme: "lineup",
@@ -26,6 +27,7 @@ const THEMES = {
     subcategoryName: "WHAT I WANT TO SAY",
     planet: "/p3.png",
     planetClass: "planet-lineup",
+    des: "The thoughts we don't usually say out loud <br/> A collection of thoughts and everyday truths that often stay unspoken"
   },
 };
 
@@ -66,13 +68,6 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
       <DashboardHeader cartCount={cartCount} />
 
       <div className={styles.main}>
-        <div className={styles["sidebar-icons"]}>
-          <div className={styles["sidebar-icon"]}>✕</div>
-          <div className={styles["sidebar-icon"]}>◎</div>
-          <div className={styles["sidebar-icon"]}>⬜</div>
-          <div className={styles["sidebar-icon"]}>☰</div>
-        </div>
-
         {/* LEFT PANEL */}
         <div className={styles["left-panel"]}>
           {Object.values(THEMES).map((t) => (
@@ -83,9 +78,9 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
                 <span className={styles.accent}>{t.t2}</span>
               </div>
               <div className={styles["hero-tagline"]}>
-                A world beyond conformity
-                <br />
-                This imagines a place beyond trends beyond expectations and beyond the rules written by society
+                {t.des.split("<br/>").map((line, idx) => (
+                  <div key={idx}>{line}</div>
+                ))}
               </div>
               <Link
                 href={`/collection?subcategory=${encodeURIComponent(t.subcategoryName)}`}

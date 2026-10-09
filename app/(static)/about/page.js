@@ -107,16 +107,13 @@ export default function AboutPage() {
           </div>
           <div className={styles["about-tagline"]}>FOR THOSE WHO DON&apos;T FIT</div>
           <div className={styles["about-body"]}>
-            <p>DeadKind is not just a brand.</p>
-            <p>It&apos;s a signal.</p>
-            <p>A frequency for the misfits, the outcasts,</p>
-            <p>the ones who see through the noise.</p>
-            <p>We don&apos;t follow culture.</p>
-            <p>We build our own.</p>
+            <p>A GenZ dystopian streetwear brand built on bold graphics, strange signals and thoughts we keep to ourselves.</p>
+            <p>We question the system.</p>
+            <p>We make what words can&apos;t always say.</p>
           </div>
           <div className={styles["about-cta"]}>
             <p>WE ARE DEADKIND.</p>
-            <p>AND THIS IS OUR TRANSMISSION.</p>
+            <p>NOT HERE TO FIT IN.</p>
           </div>
         </div>
 

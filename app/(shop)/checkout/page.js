@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Script from "next/script";
 import ImgWithFallback from "@/components/common/ImgWithFallback";
 import ShopFooter from "@/components/shop/ShopFooter";
 import { apiPost } from "@/lib/apiClient";
@@ -100,6 +99,16 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     setItems(getCart());
+    // Load Razorpay script eagerly so it's ready before the user hits Pay
+    if (window.Razorpay) {
+      razorpayReady.current = true;
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => { razorpayReady.current = true; };
+    document.head.appendChild(script);
   }, []);
 
   function showToast(msg, type = "") {
@@ -255,13 +264,6 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          razorpayReady.current = true;
-        }}
-      />
 
       <div className={styles["page-wrap"]}>
         <div className={styles["cart-header-bar"]}>

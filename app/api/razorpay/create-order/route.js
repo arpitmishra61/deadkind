@@ -103,6 +103,7 @@ export async function POST(request) {
       keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
     });
   } catch (err) {
+    console.log("Error creating Razorpay order:", err);
     return NextResponse.json({ error: err.message, firestoreOrderId, orderId }, { status: 500 });
   }
 }
