@@ -925,6 +925,7 @@
 .pipeStatBlue   { background: #eff6ff; border-color: #bfdbfe; }
 .pipeStatPurple { background: #faf5ff; border-color: #e9d5ff; }
 .pipeStatGreen  { background: #f0fdf4; border-color: #bbf7d0; }
+.pipeStatRed    { background: #fff1f2; border-color: #fecdd3; }
 
 .pipeStatLabel {
   font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
@@ -962,6 +963,7 @@
 .sectionBlue   .pipeSectionHead { background: #eff6ff; border-bottom-color: #3b82f6; }
 .sectionPurple .pipeSectionHead { background: #faf5ff; border-bottom-color: #a855f7; }
 .sectionGreen  .pipeSectionHead { background: #f0fdf4; border-bottom-color: #22c55e; }
+.sectionRed    .pipeSectionHead { background: #fff1f2; border-bottom-color: #ef4444; }
 
 .pipeSectionDot {
   width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
@@ -970,6 +972,7 @@
 .sectionBlue   .pipeSectionDot  { background: #3b82f6; }
 .sectionPurple .pipeSectionDot  { background: #a855f7; }
 .sectionGreen  .pipeSectionDot  { background: #22c55e; }
+.sectionRed    .pipeSectionDot  { background: #ef4444; }
 
 .pipeSectionTitle {
   font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #0f172a; flex: 1;

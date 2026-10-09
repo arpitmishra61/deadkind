@@ -220,9 +220,17 @@ export default function CheckoutPage() {
 
     setPhase("idle");
     const rzp = new window.Razorpay(options);
-    rzp.on("payment.failed", (resp) => {
+    rzp.on("payment.failed", async (resp) => {
       setPhase("idle");
       showToast(`✕ PAYMENT FAILED: ${resp.error?.description || "UNKNOWN ERROR"}`);
+      try {
+        await apiPost("/api/razorpay/fail-order", {
+          firestoreOrderId: order.firestoreOrderId,
+          reason: resp.error?.description || resp.error?.reason || "payment_failed",
+        });
+      } catch (e) {
+        console.error("Failed to mark order as failed:", e);
+      }
     });
     rzp.open();
   }

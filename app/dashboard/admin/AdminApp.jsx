@@ -894,8 +894,8 @@ const PIPELINE_STAGES = [
   { key: "delivered", label: "DELIVERED ORDERS",  sub: "Successfully delivered",       nextStatus: null,        btnLabel: null,                btnVariant: null,     statColor: "green"  },
 ];
 
-const STAT_COLOR_CLS = { amber: "pipeStatAmber", blue: "pipeStatBlue", purple: "pipeStatPurple", green: "pipeStatGreen" };
-const SEC_COLOR_CLS  = { amber: "sectionAmber",  blue: "sectionBlue",  purple: "sectionPurple",  green: "sectionGreen"  };
+const STAT_COLOR_CLS = { amber: "pipeStatAmber", blue: "pipeStatBlue", purple: "pipeStatPurple", green: "pipeStatGreen", red: "pipeStatRed" };
+const SEC_COLOR_CLS  = { amber: "sectionAmber",  blue: "sectionBlue",  purple: "sectionPurple",  green: "sectionGreen",  red: "sectionRed"  };
 const BTN_VARIANT_CLS = { blue: "btnAdvanceBlue", purple: "btnAdvancePurple", green: "btnAdvanceGreen" };
 
 function fmtDate(ts) {
@@ -948,7 +948,9 @@ function OrdersTab() {
     acc[st.key] = orders.filter((o) => o.status === st.key).length;
     return acc;
   }, {});
+  counts.payment_failed = orders.filter((o) => o.status === "payment_failed").length;
 
+  const failedOrders = orders.filter((o) => o.status === "payment_failed" && matchSearch(o));
   const stages = filter === "all" ? PIPELINE_STAGES : PIPELINE_STAGES.filter((p) => p.key === filter);
 
   if (loading) return <div className={s.loading}>Loading orders…</div>;
@@ -977,6 +979,14 @@ function OrdersTab() {
             <p className={s.pipeStatDesc}>{st.sub}</p>
           </div>
         ))}
+        <div
+          className={`${s.pipeStat} ${s[STAT_COLOR_CLS.red]} ${filter === "payment_failed" ? s.pipeStatActiveFilter : ""}`}
+          onClick={() => setFilter(filter === "payment_failed" ? "all" : "payment_failed")}
+        >
+          <p className={s.pipeStatLabel}>Failed</p>
+          <p className={s.pipeStatVal}>{counts.payment_failed || 0}</p>
+          <p className={s.pipeStatDesc}>Payment failed / abandoned</p>
+        </div>
       </div>
 
       {/* Filter bar */}
@@ -994,10 +1004,14 @@ function OrdersTab() {
             {st.key === "paid" ? "Pending" : st.key.charAt(0).toUpperCase() + st.key.slice(1)}
           </button>
         ))}
+        <button className={`${s.filterBtn} ${filter === "payment_failed" ? s.filterBtnActive : ""}`} onClick={() => setFilter(filter === "payment_failed" ? "all" : "payment_failed")}>
+          <span className={s.filterDot} style={{ background: "#ef4444" }} />
+          Failed
+        </button>
       </div>
 
       {/* Pipeline sections */}
-      {stages.map((st) => {
+      {(filter === "all" || filter !== "payment_failed") && stages.map((st) => {
         const stageOrders = orders.filter((o) => o.status === st.key && matchSearch(o));
         return (
           <div key={st.key} className={`${s.pipeSection} ${s[SEC_COLOR_CLS[st.statColor]]}`}>
@@ -1026,6 +1040,34 @@ function OrdersTab() {
           </div>
         );
       })}
+
+      {/* Failed orders section */}
+      {(filter === "all" || filter === "payment_failed") && (
+        <div className={`${s.pipeSection} ${s[SEC_COLOR_CLS.red]}`}>
+          <div className={s.pipeSectionHead}>
+            <span className={s.pipeSectionDot} />
+            <span className={s.pipeSectionTitle}>FAILED PAYMENTS</span>
+            <span className={s.pipeSectionCount}>{failedOrders.length}</span>
+          </div>
+          <div className={s.pipeSectionBody}>
+            {failedOrders.length === 0 ? (
+              <div className={s.empty}>
+                <p className={s.emptyTitle}>No failed orders</p>
+              </div>
+            ) : failedOrders.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                stage={{ key: "payment_failed", nextStatus: null, btnLabel: null }}
+                expanded={!!expanded[order.id]}
+                advancing={false}
+                onToggle={() => setExpanded((e) => ({ ...e, [order.id]: !e[order.id] }))}
+                onAdvance={null}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -1047,7 +1089,9 @@ function OrderCard({ order, stage, expanded, advancing, onToggle, onAdvance }) {
           <div className={s.orderTopRow}>
             <span className={s.orderIdBadge}>#{order.orderId || order.id}</span>
             <span className={s.orderDate}>{fmtDate(order.createdAt)}</span>
-            <span className={s.orderPaidBadge}>✓ PAID</span>
+            {order.status === "payment_failed"
+              ? <span className={s.badgeFailed}>✕ FAILED</span>
+              : <span className={s.orderPaidBadge}>✓ PAID</span>}
             {order.paymentMethod && <span className={s.orderMethodTag}>{order.paymentMethod.toUpperCase()}</span>}
           </div>
 
