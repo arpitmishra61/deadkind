@@ -68,7 +68,7 @@ export default function DashboardHeader({ cartCount }) {
         <Link href="/cart" className={styles["cart-btn"]}>
           CART [ {cartCount} ]
         </Link>
-        <div className={styles["header-plus-btn"]}>+</div>
+
       </div>
 
       <Link href="/cart" className={styles["cart-btn-mob"]}>

@@ -152,7 +152,7 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
               RELEASE: <span>05.24.25</span> &nbsp;&middot;&nbsp; STATUS: <span>FOR THOSE WHO DONT FIT</span>
             </div>
             <Link href="/collection" className={styles["mob-explore-pill"]}>
-              ENTER NOW
+              SHOP NOW
             </Link>
           </div>
 
@@ -185,7 +185,7 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
               VIEW ALL PRODUCTS <span style={{ color: "var(--acid-yellow)" }}>→</span>
             </Link>
           </div>
-          <div className={styles["panel-box"]}>
+          {/* <div className={styles["panel-box"]}>
             <div className={styles["join-title"]}>JOIN THE FREQUENCY_</div>
             <div className={styles["join-text"]}>
               Get early access, secret drops
@@ -198,11 +198,11 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
                 →
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <div className={styles["float-actions"]}>
+      {/* <div className={styles["float-actions"]}>
         <button type="button" className={styles["float-btn"]}>
           +
         </button>
@@ -210,7 +210,7 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
         <button type="button" className={styles["float-skull-btn"]}>
           💀
         </button>
-      </div>
+      </div> */}
 
       {/* BOTTOM BAR */}
       <div className={styles["bottom-bar"]}>
