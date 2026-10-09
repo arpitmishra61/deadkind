@@ -35,6 +35,23 @@ export async function DELETE(request) {
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
   const db = getAdminDb();
+
+  // Remove this colour from every product that references it
+  const affected = await db.collection("products").where("colours", "array-contains", id).get();
+  const batch = db.batch();
+  affected.docs.forEach((doc) => {
+    const data = doc.data();
+    const colours = (data.colours || []).filter((c) => c !== id);
+    const stock = Object.fromEntries(
+      Object.entries(data.stock || {}).filter(([k]) => !k.startsWith(`${id}_`))
+    );
+    const colourImages = Object.fromEntries(
+      Object.entries(data.colourImages || {}).filter(([k]) => k !== id)
+    );
+    batch.update(doc.ref, { colours, stock, colourImages });
+  });
+  if (!affected.empty) await batch.commit();
+
   await db.collection("colours").doc(id).delete();
   return NextResponse.json({ ok: true });
 }

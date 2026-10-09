@@ -579,30 +579,19 @@ function ProductForm({ product, meta, onSaved, onClose }) {
       const images = product.images?.length
         ? product.images
         : Object.values(product.colourImages || {}).flat().filter(Boolean);
-      return { ...BLANK, ...product, images, price: product.price?.toString() ?? "", comparePrice: product.comparePrice?.toString() ?? "" };
+      // Strip stale IDs that no longer exist in meta (e.g. after sizes/colours were recreated)
+      const colours = (product.colours || []).filter((id) => meta.colours[id]);
+      const sizes = (product.sizes || []).filter((id) => meta.sizes[id]);
+      const stock = buildStock(colours, sizes, product.stock || {});
+      return { ...BLANK, ...product, images, colours, sizes, stock, price: product.price?.toString() ?? "", comparePrice: product.comparePrice?.toString() ?? "" };
     }
-    const allColours = Object.keys(meta.colours);
-    const allSizes = Object.keys(meta.sizes);
-    return { ...BLANK, colours: allColours, sizes: allSizes, stock: buildStock(allColours, allSizes, {}) };
+    return { ...BLANK };
   });
+
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const fileRef = useRef(null);
-
-  // If meta loads after the form mounts (race condition), back-fill all colours & sizes
-  useEffect(() => {
-    if (!isNew) return;
-    const allColours = Object.keys(meta.colours);
-    const allSizes = Object.keys(meta.sizes);
-    if (!allColours.length && !allSizes.length) return;
-    setForm((f) => {
-      // Only auto-select if nothing is selected yet (don't override user's choices)
-      const colours = f.colours.length === 0 ? allColours : f.colours;
-      const sizes   = f.sizes.length   === 0 ? allSizes   : f.sizes;
-      return { ...f, colours, sizes, stock: buildStock(colours, sizes, f.stock) };
-    });
-  }, [Object.keys(meta.colours).join(","), Object.keys(meta.sizes).join(",")]);
 
   const filteredSubs = meta.subcategories.filter((sc) => sc.categoryId === form.categoryId);
 

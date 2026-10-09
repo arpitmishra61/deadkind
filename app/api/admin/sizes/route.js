@@ -35,6 +35,20 @@ export async function DELETE(request) {
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
   const db = getAdminDb();
+
+  // Remove this size from every product that references it
+  const affected = await db.collection("products").where("sizes", "array-contains", id).get();
+  const batch = db.batch();
+  affected.docs.forEach((doc) => {
+    const data = doc.data();
+    const sizes = (data.sizes || []).filter((s) => s !== id);
+    const stock = Object.fromEntries(
+      Object.entries(data.stock || {}).filter(([k]) => !k.endsWith(`_${id}`))
+    );
+    batch.update(doc.ref, { sizes, stock });
+  });
+  if (!affected.empty) await batch.commit();
+
   await db.collection("sizes").doc(id).delete();
   return NextResponse.json({ ok: true });
 }
