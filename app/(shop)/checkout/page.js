@@ -145,7 +145,7 @@ export default function CheckoutPage() {
       showToast("⚠ INVALID UPI ID FORMAT");
       return;
     }
-    showToast("✓ UPI ID LOOKS VALID", "success");
+    showToast("✓ UPI IS IN VALID FORMAT", "success");
   }
 
   async function handlePay() {

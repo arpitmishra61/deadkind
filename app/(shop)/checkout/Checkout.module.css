@@ -814,7 +814,7 @@
 .success-btn:hover {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text);
-  border-color: #555;
+  border-color: #777;
 }
 .success-btn.primary:hover {
   background: var(--accent);

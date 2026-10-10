@@ -72,7 +72,7 @@
   position: absolute;
   width: 14px;
   height: 14px;
-  border-color: #333;
+  border-color: #555;
   border-style: solid;
   z-index: 2;
   transition: border-color 0.3s;
@@ -203,7 +203,7 @@
   border-color: var(--accent);
 }
 .gallery-thumb:hover {
-  border-color: #555;
+  border-color: #777;
 }
 .gallery-placeholder {
   width: 120px;
@@ -577,7 +577,7 @@
   box-shadow: 0 0 6px rgba(232, 232, 58, 0.5);
 }
 .stock-dot.out {
-  background: #555;
+  background: #888;
 }
 .stock-text {
   font-family: var(--mono);
@@ -984,7 +984,7 @@
   display: block;
 }
 .mini-card:hover {
-  border-color: #3a3a3a;
+  border-color: #555;
   transform: translateY(-2px);
 }
 .mini-card:hover .mc-corner {
@@ -994,7 +994,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  border-color: #333;
+  border-color: #555;
   border-style: solid;
   z-index: 2;
   transition: border-color 0.2s;

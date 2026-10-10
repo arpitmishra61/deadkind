@@ -11,8 +11,8 @@
   --green: #39e75f;
   --yellow: #e8e83a;
   --text: #ffffff;
-  --text-dim: #888;
-  --text-muted: #444;
+  --text-dim: #aaa;
+  --text-muted: #cfcccc;
   --border: #1c1c1c;
   --border-mid: #2a2a2a;
   --mono: var(--font-mono), monospace;
@@ -41,6 +41,6 @@
   background: var(--bg);
 }
 .shop-theme ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #555;
   border-radius: 2px;
 }
