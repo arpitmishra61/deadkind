@@ -1240,19 +1240,6 @@
   font-weight: 400;
 }
 
-.scroll-label {
-  position: fixed;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  font-family: var(--font-mono);
-  font-size: 7px;
-  letter-spacing: 3px;
-  color: var(--gray2);
-  z-index: 50;
-  white-space: nowrap;
-}
-
 .cards-loading {
   position: absolute;
   inset: 0;

@@ -63,7 +63,6 @@ export default function DashboardHome({ subcategories, initialTheme, initialProd
       <div className={`${styles.corner} ${styles["corner-tr"]}`} />
       <div className={`${styles.corner} ${styles["corner-bl"]}`} />
       <div className={`${styles.corner} ${styles["corner-br"]}`} />
-      <div className={styles["scroll-label"]}>SCROLL TO EXPLORE</div>
 
       <DashboardHeader cartCount={cartCount} />
 

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { finalizeOrderPayment, markOrderFailed } from "@/lib/data/orders";
+import { finalizeOrderPayment, markOrderFailed, getOrderById } from "@/lib/data/orders";
 import { verifyPaymentSignature } from "@/lib/razorpay";
+import { sendMail } from "@/lib/mailer";
+import { orderConfirmationEmail } from "@/lib/emailTemplates";
 
 export async function POST(request) {
   let body;
@@ -43,6 +45,19 @@ export async function POST(request) {
       razorpayOrderId: razorpay_order_id,
       signature: razorpay_signature,
     });
+
+    if (!result.alreadyCaptured) {
+      // fire-and-forget confirmation email — don't block the response
+      getOrderById(firestoreOrderId)
+        .then((order) => {
+          const email = order?.customer?.email;
+          if (!email) return;
+          const { subject, html } = orderConfirmationEmail(order);
+          return sendMail({ to: email, subject, html });
+        })
+        .catch((err) => console.error("[mailer] confirmation email failed:", err));
+    }
+
     return NextResponse.json({ ok: true, alreadyCaptured: result.alreadyCaptured });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });

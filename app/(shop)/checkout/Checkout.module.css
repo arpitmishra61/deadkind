@@ -203,6 +203,15 @@
   border-color: var(--accent);
   background: rgba(196, 84, 134, 0.04);
 }
+.field-hint {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 0.05em;
+  margin-top: 5px;
+  display: block;
+  line-height: 1.5;
+}
 .field-error {
   font-family: var(--mono);
   font-size: 8px;

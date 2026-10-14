@@ -330,7 +330,8 @@ export default function CheckoutPage() {
                   <label>
                     EMAIL ADDRESS <span className={styles.req}>*</span>
                   </label>
-                  <input type="email" placeholder="DEAD@KIND.COM" autoComplete="email" value={form.email} onChange={update("email")} />
+                  <input type="email" placeholder="YOUR@EMAIL.COM" autoComplete="email" value={form.email} onChange={update("email")} />
+                  <span className={styles["field-hint"]}>Order confirmations &amp; shipping updates will be sent here.</span>
                   <span className={styles["field-error"]}>{errors.email}</span>
                 </div>
               </div>
