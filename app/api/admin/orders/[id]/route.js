@@ -39,14 +39,17 @@ export async function PATCH(request, { params }) {
     const data = updated.data();
 
     if (EMAIL_STATUSES.has(status)) {
-      const order = serializeDoc(updated);
-      const email = order?.customer?.email;
-      if (email) {
-        const result = orderStatusEmail(order, status);
-        if (result) {
-          sendMail({ to: email, subject: result.subject, html: result.html })
-            .catch((err) => console.error("[mailer] status email failed:", err));
+      try {
+        const order = serializeDoc(updated);
+        const email = order?.customer?.email;
+        if (email) {
+          const mailPayload = orderStatusEmail(order, status);
+          if (mailPayload) {
+            await sendMail({ to: email, subject: mailPayload.subject, html: mailPayload.html });
+          }
         }
+      } catch (mailErr) {
+        console.error("[mailer] status email failed:", mailErr);
       }
     }
 

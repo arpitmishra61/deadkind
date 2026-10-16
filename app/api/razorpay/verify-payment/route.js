@@ -47,15 +47,16 @@ export async function POST(request) {
     });
 
     if (!result.alreadyCaptured) {
-      // fire-and-forget confirmation email — don't block the response
-      getOrderById(firestoreOrderId)
-        .then((order) => {
-          const email = order?.customer?.email;
-          if (!email) return;
+      try {
+        const order = await getOrderById(firestoreOrderId);
+        const email = order?.customer?.email;
+        if (email) {
           const { subject, html } = orderConfirmationEmail(order);
-          return sendMail({ to: email, subject, html });
-        })
-        .catch((err) => console.error("[mailer] confirmation email failed:", err));
+          await sendMail({ to: email, subject, html });
+        }
+      } catch (mailErr) {
+        console.error("[mailer] confirmation email failed:", mailErr);
+      }
     }
 
     return NextResponse.json({ ok: true, alreadyCaptured: result.alreadyCaptured });
