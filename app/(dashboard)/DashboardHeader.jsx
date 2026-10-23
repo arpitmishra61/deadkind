@@ -60,7 +60,6 @@ export default function DashboardHeader({ cartCount }) {
               </Link>
             </div>
           </div>
-          <Link href="/archive">ARCHIVE</Link>
           <Link href="/about">ABOUT</Link>
           <Link href="/contact">CONTACT</Link>
         </nav>
@@ -105,9 +104,6 @@ export default function DashboardHeader({ cartCount }) {
             </Link>
           </div>
         </div>
-        <Link href="/archive" onClick={() => setMobileOpen(false)}>
-          ARCHIVE
-        </Link>
         <Link href="/about" onClick={() => setMobileOpen(false)}>
           ABOUT
         </Link>

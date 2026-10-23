@@ -1,4 +1,3 @@
-import IconSidebar from "@/components/static/IconSidebar";
 import StaticFooter from "@/components/static/StaticFooter";
 import StaticHeader from "@/components/static/StaticHeader";
 import { bebasNeue, rajdhani, shareTechMono } from "@/lib/fonts";
@@ -11,7 +10,6 @@ export default function StaticLayout({ children }) {
       <div className={styles.scanline} />
       <StaticHeader />
       <div className={styles.outer}>
-        <IconSidebar />
         <div className={styles["main-content"]}>{children}</div>
       </div>
       <StaticFooter />

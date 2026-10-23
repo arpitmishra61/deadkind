@@ -10,7 +10,6 @@ import styles from "./StaticHeader.module.css";
 const NAV_LINKS = [
   { href: "/", label: "SHOP", key: "shop" },
   { href: "/collection", label: "COLLECTIONS", key: "collections" },
-  { href: "/archive", label: "ARCHIVE", key: "archive" },
   { href: "/about", label: "ABOUT", key: "about" },
   { href: "/contact", label: "CONTACT", key: "contact" },
 ];

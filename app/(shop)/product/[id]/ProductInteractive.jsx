@@ -47,7 +47,7 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
   const [zoomed, setZoomed] = useState(false);
   const [wished, setWished] = useState(false);
   const [added, setAdded] = useState(false);
-  const [openAcc, setOpenAcc] = useState({ desc: true, details: false, shipping: false, care: false });
+  const [openAcc, setOpenAcc] = useState({ desc: true, details: false, shipping: false, returns: false, care: false });
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [stickyVisible, setStickyVisible] = useState(false);
@@ -429,7 +429,7 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
               <div className={styles["trust-text"]}>
                 SHIPS IN
                 <br />
-                2-4 DAYS
+                5-7 DAYS
               </div>
             </div>
             <div className={styles["trust-item"]}>
@@ -455,11 +455,26 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
                 ))}
               </ul>
             </AccordionItem>
-            <AccordionItem label="SHIPPING & RETURNS" open={openAcc.shipping} onToggle={() => toggleAccordion("shipping")}>
+            <AccordionItem label="SHIPPING" open={openAcc.shipping} onToggle={() => toggleAccordion("shipping")}>
               <ul>
                 <li>STANDARD DELIVERY: 5-7 WORKING DAYS</li>
-                <li>EXPRESS DELIVERY: 2-4 WORKING DAYS</li>
-                <li>FREE SHIPPING ON ORDERS ABOVE ₹1999</li>
+                <li>FREE SHIPPING ON ALL ORDERS</li>
+              </ul>
+            </AccordionItem>
+            <AccordionItem label="RETURNS" open={openAcc.returns} onToggle={() => toggleAccordion("returns")}>
+              <ul>
+                <li>
+                  <span>
+                    TO RETURN, MAIL US FIRST AT <a href="mailto:contact@deadkind.in?subject=Return request - [order id]">CONTACT@DEADKIND.IN</a>
+                  </span>
+                </li>
+              </ul>
+              <p>
+                Use the subject &quot;Return request - [order id]&quot;. All communication regarding your return will
+                happen in that same mail chain, so please mention the reason for the return and any other details in
+                your first mail.
+              </p>
+              <ul>
                 <li>RETURNS ACCEPTED WITHIN 14 DAYS OF DELIVERY</li>
                 <li>ITEMS MUST BE UNWORN &amp; IN ORIGINAL PACKAGING</li>
               </ul>

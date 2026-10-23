@@ -401,8 +401,8 @@ export default function CartPage() {
                 </svg>
               </div>
               <div className={styles["trust-mini-text"]}>
-                <div className={styles.ttitle}>WORLDWIDE SHIPPING</div>
-                <div className={styles.tsub}>1-3 OUTSIDER DAYS</div>
+                <div className={styles.ttitle}>SHIPPING ONLY IN INDIA</div>
+                <div className={styles.tsub}>5-7 WORKING DAYS</div>
               </div>
             </div>
             <div className={styles["trust-mini-item"]}>

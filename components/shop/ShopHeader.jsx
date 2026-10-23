@@ -10,7 +10,6 @@ import styles from "./ShopHeader.module.css";
 const NAV_LINKS = [
   { href: "/", label: "SHOP", key: "shop" },
   { href: "/collection", label: "COLLECTIONS", key: "collections" },
-  { href: "/archive", label: "ARCHIVE", key: "archive" },
   { href: "/about", label: "ABOUT", key: "about" },
   { href: "/contact", label: "CONTACT", key: "contact" },
 ];
@@ -104,9 +103,6 @@ export default function ShopHeader() {
             </Link>
           </div>
         </div>
-        <Link href="/archive" className={active === "archive" ? styles.active : undefined} onClick={() => setOpen(false)}>
-          ARCHIVE
-        </Link>
         <Link href="/about" className={active === "about" ? styles.active : undefined} onClick={() => setOpen(false)}>
           ABOUT
         </Link>
