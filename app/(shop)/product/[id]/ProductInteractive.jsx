@@ -290,7 +290,7 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
               </>
             )}
           </div>
-          <div className={styles["product-tax-note"]}>INCL. OF ALL TAXES. FREE SHIPPING ABOVE ₹999.</div>
+          <div className={styles["product-tax-note"]}>INCL. OF ALL TAXES. FREE SHIPPING ON ALL ORDERS.</div>
           <div className={styles.divider} />
 
           {product.colours?.length > 0 && (
@@ -475,7 +475,7 @@ export default function ProductInteractive({ product, colours, sizes, breadcrumb
                 your first mail.
               </p>
               <ul>
-                <li>RETURNS ACCEPTED WITHIN 14 DAYS OF DELIVERY</li>
+                <li>RETURNS ACCEPTED WITHIN 6 DAYS OF DELIVERY</li>
                 <li>ITEMS MUST BE UNWORN &amp; IN ORIGINAL PACKAGING</li>
               </ul>
             </AccordionItem>

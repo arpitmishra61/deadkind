@@ -9,9 +9,6 @@ import { clearCart, getCart, removeItem, setCart, updateQty } from "@/lib/cart";
 import { formatPriceINR } from "@/lib/format";
 import styles from "./Cart.module.css";
 
-const SHIPPING_FEE = 99;
-const FREE_SHIP_THRESHOLD = 1999;
-
 function getStockStatus(maxStock) {
   if (maxStock === 0) return "out";
   if (maxStock <= 5) return "low";
@@ -129,10 +126,8 @@ export default function CartPage() {
   }
 
   const subtotal = useMemo(() => items.reduce((s, it) => s + it.price * it.qty, 0), [items]);
-  const shipping = subtotal === 0 || subtotal >= FREE_SHIP_THRESHOLD ? 0 : SHIPPING_FEE;
-  const total = subtotal + shipping;
+  const total = subtotal;
   const count = items.reduce((s, it) => s + it.qty, 0);
-  const shippingPct = Math.min((subtotal / FREE_SHIP_THRESHOLD) * 100, 100);
 
   if (loading) {
     return (
@@ -303,25 +298,7 @@ export default function CartPage() {
           </div>
           <div className={styles["summary-row"]}>
             <span className={styles.label}>SHIPPING</span>
-            <span className={`${styles.val} ${shipping === 0 ? styles.free : ""}`}>
-              {shipping === 0 ? "FREE" : formatPriceINR(shipping)}
-            </span>
-          </div>
-
-          <div className={styles["shipping-progress-wrap"]}>
-            <div className={styles["shipping-progress-label"]}>
-              {subtotal >= FREE_SHIP_THRESHOLD ? (
-                <span className={styles.highlight}>✓ YOU&apos;VE UNLOCKED FREE SHIPPING!</span>
-              ) : (
-                <>
-                  ADD <span className={styles["amount-left"]}>{formatPriceINR(FREE_SHIP_THRESHOLD - subtotal)}</span> MORE FOR
-                  FREE SHIPPING
-                </>
-              )}
-            </div>
-            <div className={styles["shipping-bar-track"]}>
-              <div className={styles["shipping-bar-fill"]} style={{ width: `${subtotal === 0 ? 0 : shippingPct}%` }} />
-            </div>
+            <span className={`${styles.val} ${styles.free}`}>FREE</span>
           </div>
 
           <div className={styles["summary-row"]} style={{ marginTop: 12 }}>
